@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aramis Games — Puzzle games for focused minds</title>
+    <meta name="description" content="Aramis Games crafts puzzle games that respect your intelligence. Sudoku, 2048, Wordle and more — free on Google Play.">
+    <meta property="og:title" content="Aramis Games">
+    <meta property="og:description" content="Puzzle games for focused minds.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://soyaramis-games.github.io">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%232C4E80'/><rect x='4' y='4' width='11' height='11' rx='2.5' fill='white' opacity='.95'/><rect x='17' y='4' width='11' height='11' rx='2.5' fill='white' opacity='.55'/><rect x='4' y='17' width='11' height='11' rx='2.5' fill='white' opacity='.55'/><rect x='17' y='17' width='11' height='11' rx='2.5' fill='%23C0713A'/></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+
+    <style>
+        /* ─── Reset ─── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        :root {
+            --ink:        #0C1628;
+            --ink-mid:    #172236;
+            --blue:       #2C4E80;
+            --blue-light: #4A7EC8;
+            --amber:      #C0713A;
+            --amber-dim:  rgba(192,113,58,0.18);
+            --cream:      #FAF9F7;
+            --white:      #FFFFFF;
+            --text:       #1A1A1A;
+            --muted:      #696963;
+            --border:     #E8E7E1;
+            --r:          12px;
+            --r-lg:       20px;
+            --font-d:     'DM Serif Display', Georgia, serif;
+            --font-b:     'DM Sans', system-ui, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-b);
+            color: var(--text);
+            background: var(--cream);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+
+        /* ════════════════════════════
+           NAV
+        ════════════════════════════ */
+        .nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            padding: 1.2rem 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            transition: background 0.35s, backdrop-filter 0.35s, border-color 0.35s;
+            border-bottom: 1px solid transparent;
+        }
+        .nav.scrolled {
+            background: rgba(10, 18, 34, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-color: rgba(74,144,200,0.12);
+        }
+        .nav__logo {
+            display: flex; align-items: center; gap: 0.7rem;
+            text-decoration: none; flex-shrink: 0;
+        }
+        .nav__wordmark {
+            font-family: var(--font-d);
+            font-size: 1.05rem;
+            color: var(--white);
+            letter-spacing: 0.05em;
+        }
+        .nav__wordmark em { font-style: normal; color: #C0713A; }
+        .nav__links {
+            display: flex; align-items: center; gap: 2rem;
+            list-style: none;
+            flex: 1; justify-content: flex-end;
+        }
+        .nav__links a {
+            color: rgba(255,255,255,0.65);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            transition: color 0.2s;
+            white-space: nowrap;
+        }
+        .nav__links a:hover { color: var(--white); }
+        .nav__cta {
+            background: var(--amber) !important;
+            color: var(--white) !important;
+            padding: 0.45rem 1.2rem !important;
+            border-radius: 100px;
+            font-weight: 600 !important;
+            transition: background 0.2s, transform 0.2s !important;
+        }
+        .nav__cta:hover { background: #d4834a !important; transform: translateY(-1px); }
+
+        /* Language picker */
+        .lang-picker { position: relative; flex-shrink: 0; }
+        .lang-btn {
+            display: flex; align-items: center; gap: 5px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.14);
+            color: rgba(255,255,255,0.7);
+            padding: 0.35rem 0.85rem;
+            border-radius: 100px;
+            font-family: var(--font-b);
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            white-space: nowrap;
+        }
+        .lang-btn:hover { background: rgba(255,255,255,0.12); color: var(--white); }
+        .lang-drop {
+            position: absolute; top: calc(100% + 10px); right: 0;
+            background: #1A2A44;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 5px;
+            min-width: 148px;
+            list-style: none;
+            display: none;
+            z-index: 200;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+        .lang-drop.open { display: block; }
+        .lang-drop li button {
+            display: block; width: 100%;
+            padding: 7px 12px;
+            border-radius: 8px;
+            border: none; background: transparent;
+            color: rgba(255,255,255,0.55);
+            font-family: var(--font-b);
+            font-size: 0.82rem;
+            text-align: left; cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+        }
+        .lang-drop li button:hover  { background: rgba(255,255,255,0.07); color: var(--white); }
+        .lang-drop li button.active { color: var(--amber); font-weight: 600; }
+
+
+        /* ════════════════════════════
+           HERO
+        ════════════════════════════ */
+        .hero {
+            min-height: 100vh;
+            background: var(--ink);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 9rem 2rem 5rem;
+            text-align: center;
+        }
+        .hero__grid {
+            position: absolute; inset: 0;
+            background-image: radial-gradient(circle, rgba(74,144,200,0.22) 1.5px, transparent 1.5px);
+            background-size: 38px 38px;
+            animation: gridDrift 28s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes gridDrift { to { background-position: 38px 38px; } }
+        .hero__glow {
+            position: absolute; top: 45%; left: 50%;
+            transform: translate(-50%, -55%);
+            width: min(65vw, 680px); height: min(65vw, 680px);
+            background: radial-gradient(circle, rgba(44,95,138,0.32) 0%, transparent 68%);
+            pointer-events: none;
+        }
+        .hero__glow-amber {
+            position: absolute; bottom: 18%; right: 12%;
+            width: min(28vw, 320px); height: min(28vw, 320px);
+            background: radial-gradient(circle, rgba(192,113,58,0.18) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero__content {
+            position: relative; z-index: 1;
+            max-width: 780px;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .hero__mark {
+            margin-bottom: 1.5rem;
+            animation: fadeUp 0.7s ease both 0.1s;
+        }
+        .hero__mark .sq-amber { animation: amberpulse 3.5s ease-in-out infinite 1.5s; }
+        @keyframes amberpulse { 0%,100% { opacity:1; } 50% { opacity:0.6; } }
+        .hero__brand {
+            font-family: var(--font-d);
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.5);
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            margin-bottom: 2.5rem;
+            animation: fadeUp 0.7s ease both 0.2s;
+        }
+        .hero__tagline {
+            font-family: var(--font-d);
+            font-size: clamp(3rem, 7.5vw, 5.8rem);
+            color: var(--white);
+            line-height: 1.08;
+            letter-spacing: -0.025em;
+            margin-bottom: 1.6rem;
+            animation: fadeUp 0.7s ease both 0.35s;
+        }
+        .hero__tagline em { font-style: italic; color: var(--amber); }
+        .hero__sub {
+            font-size: clamp(0.95rem, 2vw, 1.15rem);
+            color: rgba(255,255,255,0.55);
+            max-width: 460px;
+            line-height: 1.7;
+            margin-bottom: 2.5rem;
+            animation: fadeUp 0.7s ease both 0.5s;
+        }
+        .hero__cta {
+            display: inline-flex; align-items: center; gap: 0.55rem;
+            background: var(--amber); color: var(--white);
+            text-decoration: none; font-weight: 600;
+            font-size: 0.95rem; padding: 0.85rem 2rem;
+            border-radius: 100px;
+            transition: background 0.2s, transform 0.2s;
+            letter-spacing: 0.01em;
+            animation: fadeUp 0.7s ease both 0.65s;
+        }
+        .hero__cta:hover { background: #d4834a; transform: translateY(-2px); }
+        .hero__scroll-hint {
+            position: absolute; bottom: 2.2rem; left: 50%;
+            transform: translateX(-50%);
+            display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+            color: rgba(255,255,255,0.25);
+            font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+            animation: fadeUp 1s ease both 1.2s;
+        }
+        .hero__scroll-line {
+            width: 1px; height: 36px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+            animation: scrollPulse 1.8s ease-in-out infinite;
+        }
+        @keyframes scrollPulse { 0%,100% { opacity:1; transform:scaleY(1); } 50% { opacity:0.4; transform:scaleY(0.6); } }
+        @keyframes fadeUp { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:translateY(0); } }
+
+
+        /* ════════════════════════════
+           TICKER
+        ════════════════════════════ */
+        .ticker { background: var(--blue); padding: 0.85rem 0; overflow: hidden; }
+        .ticker__track { display: flex; width: max-content; animation: tickerRoll 22s linear infinite; }
+        .ticker__chunk { display: flex; align-items: center; padding: 0 1.5rem; white-space: nowrap; }
+        .ticker__item { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.88); padding: 0 1.5rem; }
+        .ticker__sep  { width: 4px; height: 4px; background: rgba(255,255,255,0.35); border-radius: 50%; flex-shrink: 0; }
+        @keyframes tickerRoll { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+
+
+        /* ════════════════════════════
+           SHARED SECTION PARTS
+        ════════════════════════════ */
+        .s-eyebrow { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blue); margin-bottom: 0.7rem; }
+        .s-title   { font-family: var(--font-d); font-size: clamp(1.9rem, 4vw, 2.8rem); color: var(--text); line-height: 1.15; letter-spacing: -0.02em; }
+        .s-sub     { margin-top: 1rem; font-size: 1rem; color: var(--muted); max-width: 460px; margin-left: auto; margin-right: auto; line-height: 1.65; }
+        .s-header  { text-align: center; margin-bottom: 3.5rem; }
+
+
+        /* ════════════════════════════
+           GAMES SECTION
+        ════════════════════════════ */
+        .games { padding: 6rem 2rem 5rem; background: var(--cream); }
+        .games__wrap { max-width: 1120px; margin: 0 auto; }
+
+        .feat {
+            background: var(--white); border: 1px solid var(--border);
+            border-radius: var(--r-lg); overflow: hidden;
+            display: grid; grid-template-columns: 1fr 1fr;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 20px rgba(12,22,40,0.05);
+            transition: box-shadow 0.3s, transform 0.3s;
+        }
+        .feat:hover { box-shadow: 0 8px 40px rgba(12,22,40,0.12); transform: translateY(-3px); }
+        .feat__visual {
+            background: linear-gradient(140deg, var(--ink) 0%, var(--ink-mid) 100%);
+            min-height: 340px;
+            display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden;
+        }
+        .feat__visual::before {
+            content: ''; position: absolute; inset: 0;
+            background-image: radial-gradient(circle, rgba(74,144,200,0.18) 1px, transparent 1px);
+            background-size: 22px 22px;
+        }
+        .feat__info { padding: 3rem 3rem 3rem 2.5rem; display: flex; flex-direction: column; justify-content: center; }
+
+        .badge {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            padding: 0.3rem 0.85rem; border-radius: 100px;
+            font-size: 0.72rem; font-weight: 600; letter-spacing: 0.07em;
+            text-transform: uppercase; align-self: flex-start; margin-bottom: 1.2rem;
+        }
+        .badge--live { background: rgba(83,141,78,0.1); color: #3A7A36; border: 1px solid rgba(83,141,78,0.22); }
+        .badge--live::before { content:''; width:6px; height:6px; background:#538D4E; border-radius:50%; animation: livepulse 2s ease-in-out infinite; }
+        @keyframes livepulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.45; transform:scale(0.75); } }
+        .badge--soon { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(192,113,58,0.2); }
+
+        .feat__title { font-family: var(--font-d); font-size: 2.1rem; color: var(--text); margin-bottom: 0.75rem; line-height: 1.2; }
+        .feat__desc  { color: var(--muted); line-height: 1.7; margin-bottom: 2rem; font-size: 0.97rem; }
+        .btn-play {
+            display: inline-flex; align-items: center; gap: 0.55rem;
+            background: var(--ink); color: var(--white);
+            text-decoration: none; font-weight: 600; font-size: 0.88rem;
+            padding: 0.75rem 1.6rem; border-radius: 100px;
+            transition: background 0.2s, transform 0.2s; align-self: flex-start;
+        }
+        .btn-play:hover { background: var(--blue); transform: translateY(-1px); }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 1.1rem; }
+        .card {
+            background: var(--white); border: 1px solid var(--border);
+            border-radius: var(--r); padding: 1.6rem 1.4rem 1.5rem;
+            display: flex; flex-direction: column; gap: 0.85rem;
+            transition: box-shadow 0.25s, transform 0.25s;
+        }
+        .card:hover { box-shadow: 0 4px 22px rgba(12,22,40,0.09); transform: translateY(-3px); }
+        .card__icon  { width: 46px; height: 46px; border-radius: 11px; display: flex; align-items: center; justify-content: center; }
+        .card__name  { font-family: var(--font-d); font-size: 1.1rem; color: var(--text); line-height: 1.2; }
+        .card__genre { font-size: 0.78rem; color: var(--muted); margin-top: -0.4rem; }
+
+
+        /* ════════════════════════════
+           ABOUT / PILLARS
+        ════════════════════════════ */
+        .about { background: var(--ink); padding: 7rem 2rem; position: relative; overflow: hidden; }
+        .about::before {
+            content:''; position: absolute; inset: 0;
+            background-image: radial-gradient(circle, rgba(74,144,200,0.1) 1px, transparent 1px);
+            background-size: 38px 38px; pointer-events: none;
+        }
+        .about__wrap { max-width: 1020px; margin: 0 auto; position: relative; }
+        .about .s-eyebrow { color: rgba(74,144,200,0.7); }
+        .about .s-title   { color: var(--white); }
+        .about .s-title em { font-style: italic; color: var(--amber); }
+        .about .s-sub     { color: rgba(255,255,255,0.42); margin-top: 1.1rem; }
+
+        .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 4rem; }
+        .pillar {
+            padding: 2.2rem 1.8rem;
+            background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.07);
+            border-radius: var(--r);
+            transition: background 0.3s, border-color 0.3s, transform 0.3s;
+        }
+        .pillar:hover { background: rgba(44,95,138,0.14); border-color: rgba(74,144,200,0.2); transform: translateY(-3px); }
+        .pillar__icon { width: 42px; height: 42px; background: rgba(192,113,58,0.13); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.4rem; }
+        .pillar__title { font-family: var(--font-d); font-size: 1.35rem; color: var(--white); margin-bottom: 0.7rem; }
+        .pillar__body  { font-size: 0.9rem; color: rgba(255,255,255,0.45); line-height: 1.75; }
+
+
+        /* ════════════════════════════
+           FOOTER
+        ════════════════════════════ */
+        .footer { background: #070D1C; padding: 3.5rem 2rem; border-top: 1px solid rgba(255,255,255,0.05); }
+        .footer__inner { max-width: 1120px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 1.8rem; }
+        .footer__logo  { display: flex; align-items: center; gap: 0.7rem; text-decoration: none; }
+        .footer__wordmark { font-family: var(--font-d); font-size: 1.2rem; color: var(--white); letter-spacing: 0.04em; }
+        .footer__wordmark em { font-style: normal; color: #C0713A; }
+        .footer__links { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0.4rem 2rem; list-style: none; }
+        .footer__links a { color: rgba(255,255,255,0.35); text-decoration: none; font-size: 0.83rem; transition: color 0.2s; }
+        .footer__links a:hover { color: rgba(255,255,255,0.75); }
+        .footer__copy { font-size: 0.78rem; color: rgba(255,255,255,0.2); }
+
+        /* Live-game card in the grid */
+        .card--live { border-color: rgba(83,141,78,0.28); background: rgba(83,141,78,0.03); }
+        .btn-play-sm {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            background: var(--ink); color: var(--white);
+            text-decoration: none; font-size: 0.78rem; font-weight: 600;
+            padding: 0.45rem 1rem; border-radius: 100px;
+            transition: background 0.2s; align-self: flex-start;
+            margin-top: 0.1rem;
+        }
+        .btn-play-sm:hover { background: var(--blue); }
+
+
+        /* ════════════════════════════
+           RESPONSIVE
+        ════════════════════════════ */
+        @media (max-width: 900px) { .pillars { grid-template-columns: 1fr; gap: 1rem; } }
+        @media (max-width: 760px) {
+            .nav { padding: 1rem 1.4rem; }
+            .nav__links { display: none; }
+            .feat { grid-template-columns: 1fr; }
+            .feat__visual { min-height: 220px; }
+            .feat__info { padding: 2rem 1.6rem; }
+            .feat__title { font-size: 1.7rem; }
+            .hero  { padding: 8rem 1.4rem 5rem; }
+            .games { padding: 4rem 1.4rem; }
+            .about { padding: 5rem 1.4rem; }
+        }
+        @media (max-width: 480px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    </style>
+</head>
+
+<body>
+
+<!-- ─── NAV ─── -->
+<nav class="nav" id="nav">
+    <a href="#" class="nav__logo">
+        <!-- 4 letter-tiles S·O·Y·A inside a brand-blue pill, matching the app icon style -->
+        <svg width="60" height="24" viewBox="0 0 60 24" fill="none" aria-hidden="true">
+            <rect width="60" height="24" rx="5" fill="#2C4E80"/>
+            <rect x="3"  y="4" width="11" height="16" rx="2.5" fill="white"/>
+            <rect x="16" y="4" width="11" height="16" rx="2.5" fill="white" opacity="0.82"/>
+            <rect x="29" y="4" width="11" height="16" rx="2.5" fill="white" opacity="0.60"/>
+            <rect x="42" y="4" width="11" height="16" rx="2.5" fill="white" opacity="0.40"/>
+            <text x="8.5"  y="15.5" text-anchor="middle" fill="#2C4E80" font-family="'DM Sans',system-ui" font-size="9" font-weight="700">S</text>
+            <text x="21.5" y="15.5" text-anchor="middle" fill="#2C4E80" font-family="'DM Sans',system-ui" font-size="9" font-weight="700">O</text>
+            <text x="34.5" y="15.5" text-anchor="middle" fill="#2C4E80" font-family="'DM Sans',system-ui" font-size="9" font-weight="700">Y</text>
+            <text x="47.5" y="15.5" text-anchor="middle" fill="#2C4E80" font-family="'DM Sans',system-ui" font-size="9" font-weight="700">A</text>
+        </svg>
+        <span class="nav__wordmark">Soyaramis <em>Games</em></span>
+    </a>
+    <ul class="nav__links">
+        <li><a href="#games" data-t="nav.games">Games</a></li>
+        <li><a href="#about" data-t="nav.about">About</a></li>
+        <li><a href="privacy-policy.html" data-t="nav.privacy">Privacy</a></li>
+        <li>
+            <a href="https://play.google.com/store/apps/developer?id=SoyAramis+games"
+               target="_blank" rel="noopener" class="nav__cta">
+                Play Store ↗
+            </a>
+        </li>
+    </ul>
+
+    <!-- Language picker — always visible, even on mobile -->
+    <div class="lang-picker" id="langPicker">
+        <button class="lang-btn" id="langBtn" aria-label="Select language">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/>
+                <path d="M8 1.5C8 1.5 5.5 4.5 5.5 8s2.5 6.5 2.5 6.5M8 1.5C8 1.5 10.5 4.5 10.5 8S8 14.5 8 14.5M1.5 8h13" stroke="currentColor" stroke-width="1.3"/>
+            </svg>
+            <span id="langCode">EN</span>
+        </button>
+        <ul class="lang-drop" id="langDrop">
+            <li><button data-l="en">English</button></li>
+            <li><button data-l="es">Español</button></li>
+            <li><button data-l="pt">Português</button></li>
+            <li><button data-l="hi">हिन्दी</button></li>
+            <li><button data-l="ja">日本語</button></li>
+            <li><button data-l="de">Deutsch</button></li>
+            <li><button data-l="it">Italiano</button></li>
+        </ul>
+    </div>
+</nav>
+
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+    <div class="hero__grid" aria-hidden="true"></div>
+    <div class="hero__glow" aria-hidden="true"></div>
+    <div class="hero__glow-amber" aria-hidden="true"></div>
+
+    <div class="hero__content">
+        <!-- Static version of the app splash: SOYARAMIS letter-tiles + Games -->
+        <div class="hero__mark" aria-hidden="true">
+            <svg width="310" height="70" viewBox="0 0 310 70" fill="none" aria-label="Soyaramis Games">
+                <defs>
+                    <filter id="tile-shadow" x="-25%" y="-25%" width="150%" height="150%">
+                        <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#000000" flood-opacity="0.20"/>
+                    </filter>
+                </defs>
+                <!-- 9 white tiles: S O Y A R A M I S (30×30, gap 5) -->
+                <g filter="url(#tile-shadow)">
+                    <rect x="0"   y="0" width="30" height="30" rx="6" fill="white"/>
+                    <rect x="35"  y="0" width="30" height="30" rx="6" fill="white"/>
+                    <rect x="70"  y="0" width="30" height="30" rx="6" fill="white"/>
+                    <rect x="105" y="0" width="30" height="30" rx="6" fill="white"/>
+                    <rect x="140" y="0" width="30" height="30" rx="6" fill="white"/>
+                    <rect x="175" y="0" width="30" height="30" rx="6" fill="white"/>
+                    <rect x="210" y="0" width="30" height="30" rx="6" fill="white"/>
+                    <rect x="245" y="0" width="30" height="30" rx="6" fill="white"/>
+                    <rect x="280" y="0" width="30" height="30" rx="6" fill="white"/>
+                </g>
+                <!-- Letters in brand-blue -->
+                <text x="15"  y="22" text-anchor="middle" fill="#2C4E80" font-family="'DM Sans',system-ui" font-size="17" font-weight="700">S</text>
+                <text x="50"  y="22" text-anchor="middle" fill="#2C4E80" font-family="'DM Sans',system-ui" font-size="17" font-weight="700">O</text>
+                <text x="85"  y="22" text-anchor="middle" fill="#2C4E80" font-family="'DM Sans',system-ui" font-size="17" font-weight="700">Y</text>
+                <text x="120" y="22" text-anchor="middle" fill="#2C4E80" font-family="'DM Sans',system-ui" font-size="17" font-weight="700">A</text>
+                <text x="155" y="22" text-anchor="middle" fill="#2C4E80" font-family="'DM Sans',system-ui" font-size="17" font-weight="700">R</text>
+                <text x="190" y="22" text-anchor="middle" fill="#2C4E80" font-family="'DM Sans',system-ui" font-size="17" font-weight="700">A</text>
+                <text x="225" y="22" text-anchor="middle" fill="#2C4E80" font-family="'DM Sans',system-ui" font-size="17" font-weight="700">M</text>
+                <text x="260" y="22" text-anchor="middle" fill="#2C4E80" font-family="'DM Sans',system-ui" font-size="17" font-weight="700">I</text>
+                <text x="295" y="22" text-anchor="middle" fill="#2C4E80" font-family="'DM Sans',system-ui" font-size="17" font-weight="700">S</text>
+                <!-- "Games" in amber below, matching the app splash -->
+                <text x="155" y="60" text-anchor="middle" fill="#C0713A" font-family="'DM Sans',system-ui" font-size="20" font-weight="600" letter-spacing="4">Games</text>
+            </svg>
+        </div>
+
+        <p class="hero__brand">Madrid &nbsp;·&nbsp; Spain</p>
+
+        <h1 class="hero__tagline" data-t-html="hero.tagline">
+            The pleasure<br>of <em>thinking.</em>
+        </h1>
+
+        <p class="hero__sub" data-t="hero.sub">
+            We craft puzzle games that demand your full attention — and reward every moment of it.
+        </p>
+
+        <a href="#games" class="hero__cta">
+            <span data-t="hero.cta">Explore our games</span>
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M8 3v10M8 13l-4-4M8 13l4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+    </div>
+
+    <div class="hero__scroll-hint" aria-hidden="true">
+        <div class="hero__scroll-line"></div>
+        <span data-t="hero.scroll">scroll</span>
+    </div>
+</section>
+
+
+<!-- ─── TICKER ─── -->
+<div class="ticker" aria-hidden="true">
+    <div class="ticker__track">
+        <div class="ticker__chunk">
+            <span class="ticker__item">Sudoku</span><span class="ticker__sep"></span>
+            <span class="ticker__item">2048</span><span class="ticker__sep"></span>
+            <span class="ticker__item">Wordle</span><span class="ticker__sep"></span>
+            <span class="ticker__item">Minesweeper</span><span class="ticker__sep"></span>
+            <span class="ticker__item">Nonograms</span><span class="ticker__sep"></span>
+            <span class="ticker__item">Word Search</span><span class="ticker__sep"></span>
+            <span class="ticker__item">Water Sort</span><span class="ticker__sep"></span>
+            <span class="ticker__item">Bubble Shooter</span><span class="ticker__sep"></span>
+            <span class="ticker__item">Brick Break</span><span class="ticker__sep"></span>
+            <span class="ticker__item">Tetris</span><span class="ticker__sep"></span>
+        </div>
+        <div class="ticker__chunk" aria-hidden="true">
+            <span class="ticker__item">Sudoku</span><span class="ticker__sep"></span>
+            <span class="ticker__item">2048</span><span class="ticker__sep"></span>
+            <span class="ticker__item">Wordle</span><span class="ticker__sep"></span>
+            <span class="ticker__item">Minesweeper</span><span class="ticker__sep"></span>
+            <span class="ticker__item">Nonograms</span><span class="ticker__sep"></span>
+            <span class="ticker__item">Word Search</span><span class="ticker__sep"></span>
+            <span class="ticker__item">Water Sort</span><span class="ticker__sep"></span>
+            <span class="ticker__item">Bubble Shooter</span><span class="ticker__sep"></span>
+            <span class="ticker__item">Brick Break</span><span class="ticker__sep"></span>
+            <span class="ticker__item">Tetris</span><span class="ticker__sep"></span>
+        </div>
+    </div>
+</div>
+
+
+<!-- ─── GAMES ─── -->
+<section class="games" id="games">
+    <div class="games__wrap">
+
+        <div class="s-header">
+            <p class="s-eyebrow" data-t="sec.games.ey">The Collection</p>
+            <h2 class="s-title" data-t="sec.games.title">Games for every kind of thinker</h2>
+            <p class="s-sub" data-t="sec.games.sub">One published, more on the way. Each one a complete experience — nothing more, nothing less.</p>
+        </div>
+
+        <article class="feat">
+            <div class="feat__visual">
+                <svg width="210" height="210" viewBox="0 0 210 210" fill="none"
+                     style="position:relative;z-index:1;" aria-hidden="true">
+                    <rect x="8"   y="8"   width="60" height="60" rx="7" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.13)" stroke-width="1"/>
+                    <rect x="75"  y="8"   width="60" height="60" rx="7" fill="rgba(44,95,138,0.35)"  stroke="rgba(74,144,200,0.45)" stroke-width="1"/>
+                    <rect x="142" y="8"   width="60" height="60" rx="7" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.13)" stroke-width="1"/>
+                    <rect x="8"   y="75"  width="60" height="60" rx="7" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.13)" stroke-width="1"/>
+                    <rect x="75"  y="75"  width="60" height="60" rx="7" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.13)" stroke-width="1"/>
+                    <rect x="142" y="75"  width="60" height="60" rx="7" fill="rgba(44,95,138,0.35)"  stroke="rgba(74,144,200,0.45)" stroke-width="1"/>
+                    <rect x="8"   y="142" width="60" height="60" rx="7" fill="rgba(192,113,58,0.28)" stroke="rgba(192,113,58,0.55)" stroke-width="1"/>
+                    <rect x="75"  y="142" width="60" height="60" rx="7" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.13)" stroke-width="1"/>
+                    <rect x="142" y="142" width="60" height="60" rx="7" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.13)" stroke-width="1"/>
+                    <text x="38"  y="47"  text-anchor="middle" fill="rgba(255,255,255,0.22)" font-family="DM Serif Display,serif" font-size="30">7</text>
+                    <text x="105" y="47"  text-anchor="middle" fill="rgba(255,255,255,0.85)" font-family="DM Serif Display,serif" font-size="30">4</text>
+                    <text x="172" y="47"  text-anchor="middle" fill="rgba(255,255,255,0.22)" font-family="DM Serif Display,serif" font-size="30">2</text>
+                    <text x="38"  y="114" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-family="DM Serif Display,serif" font-size="30">9</text>
+                    <text x="105" y="114" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-family="DM Serif Display,serif" font-size="30">1</text>
+                    <text x="172" y="114" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-family="DM Serif Display,serif" font-size="30">6</text>
+                    <text x="38"  y="181" text-anchor="middle" fill="rgba(192,113,58,0.95)" font-family="DM Serif Display,serif" font-size="30">3</text>
+                    <text x="105" y="181" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-family="DM Serif Display,serif" font-size="30">8</text>
+                    <text x="172" y="181" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-family="DM Serif Display,serif" font-size="30">5</text>
+                </svg>
+            </div>
+            <div class="feat__info">
+                <div class="badge badge--live" data-t="badge.live">Live now</div>
+                <h3 class="feat__title">Sudoku Puzzle</h3>
+                <p class="feat__desc" data-t="feat.desc">
+                    The classic logic puzzle, done right. Four difficulty levels, a clean interface, and a timer that only matters when you want it to. No tricks — just the grid and you.
+                </p>
+                <a id="feat-play-link" href="https://play.google.com/store/apps/details?id=com.aramis.sudoku"
+                   target="_blank" rel="noopener" class="btn-play">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M5 3.5v17c0 .83 1.01 1.3 1.6.8l13-8.5a1 1 0 000-1.6L6.6 2.7C6.01 2.2 5 2.67 5 3.5z"/>
+                    </svg>
+                    <span data-t="feat.play">Get it on Google Play</span>
+                </a>
+            </div>
+        </article>
+
+        <!-- Grid rendered by JS from the GAMES config in the script below -->
+        <div class="grid" id="games-grid"></div>
+    </div>
+</section>
+
+
+<!-- ─── ABOUT ─── -->
+<section class="about" id="about">
+    <div class="about__wrap">
+        <div class="s-header">
+            <p class="s-eyebrow" data-t="sec.about.ey">Our philosophy</p>
+            <h2 class="s-title" data-t-html="about.title">A good puzzle is worth<br><em>a thousand features.</em></h2>
+            <p class="s-sub" data-t="about.sub">No subscriptions. No energy bars. No guilt trips. Just you and a puzzle that's genuinely worth your time.</p>
+        </div>
+
+        <div class="pillars">
+            <div class="pillar">
+                <div class="pillar__icon">
+                    <svg width="20" height="20" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+                        <circle cx="11" cy="11" r="9" stroke="#C0713A" stroke-width="1.5"/>
+                        <path d="M11 7v4.5l3 2.5" stroke="#C0713A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h3 class="pillar__title" data-t="p1.title">Focus</h3>
+                <p class="pillar__body" data-t="p1.body">Every screen does one thing. No dark patterns, no notification traps, no endless loops designed to steal another hour. You play when you want to — and stop just as easily.</p>
+            </div>
+
+            <div class="pillar">
+                <div class="pillar__icon">
+                    <svg width="20" height="20" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+                        <path d="M4 18L11 4l7 14" stroke="#C0713A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M6.5 13h9" stroke="#C0713A" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <h3 class="pillar__title" data-t="p2.title">Craft</h3>
+                <p class="pillar__body" data-t="p2.body">We obsess over the small things — the timing of an animation, the weight of a tap, the exact moment a completed row should flash. Details aren't extras. They're the whole point.</p>
+            </div>
+
+            <div class="pillar">
+                <div class="pillar__icon">
+                    <svg width="20" height="20" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+                        <path d="M3 19L11 3l8 16" stroke="#C0713A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M11 3v16" stroke="#C0713A" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="2 2"/>
+                    </svg>
+                </div>
+                <h3 class="pillar__title" data-t="p3.title">Timeless</h3>
+                <p class="pillar__body" data-t="p3.body">Logic puzzles have been captivating minds for centuries. We're not chasing trends or manufacturing seasons. We build games people will still want to play years from now.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ─── FOOTER ─── -->
+<footer class="footer">
+    <div class="footer__inner">
+        <a href="#" class="footer__logo">
+            <svg width="60" height="24" viewBox="0 0 60 24" fill="none" aria-hidden="true">
+                <rect width="60" height="24" rx="5" fill="#2C4E80"/>
+                <rect x="3"  y="4" width="11" height="16" rx="2.5" fill="white"/>
+                <rect x="16" y="4" width="11" height="16" rx="2.5" fill="white" opacity="0.82"/>
+                <rect x="29" y="4" width="11" height="16" rx="2.5" fill="white" opacity="0.60"/>
+                <rect x="42" y="4" width="11" height="16" rx="2.5" fill="white" opacity="0.40"/>
+                <text x="8.5"  y="15.5" text-anchor="middle" fill="#2C4E80" font-family="'DM Sans',system-ui" font-size="9" font-weight="700">S</text>
+                <text x="21.5" y="15.5" text-anchor="middle" fill="#2C4E80" font-family="'DM Sans',system-ui" font-size="9" font-weight="700">O</text>
+                <text x="34.5" y="15.5" text-anchor="middle" fill="#2C4E80" font-family="'DM Sans',system-ui" font-size="9" font-weight="700">Y</text>
+                <text x="47.5" y="15.5" text-anchor="middle" fill="#2C4E80" font-family="'DM Sans',system-ui" font-size="9" font-weight="700">A</text>
+            </svg>
+            <span class="footer__wordmark">Soyaramis <em>Games</em></span>
+        </a>
+        <ul class="footer__links">
+            <li><a href="#games" data-t="footer.games">Games</a></li>
+            <li><a href="#about" data-t="footer.about">About</a></li>
+            <li><a href="privacy-policy.html" data-t="footer.privacy">Privacy Policy</a></li>
+            <li><a href="https://play.google.com/store/apps/developer?id=SoyAramis+games" target="_blank" rel="noopener">Google Play</a></li>
+            <li><a href="mailto:soyaramis.games@gmail.com" data-t="footer.contact">Contact</a></li>
+        </ul>
+        <p class="footer__copy" data-t="footer.copy">&copy; 2026 Soyaramis Games &nbsp;·&nbsp; Made in Madrid</p>
+    </div>
+</footer>
+
+
+<script>
+/* ════════════════════════════════════════════════════════════════════════════
+   ██  CATÁLOGO DE JUEGOS  ██
+   ─ Edita aquí para publicar un juego o añadir uno nuevo al catálogo. ─
+   ─ El skill "update-website" de Claude Code también modifica este bloque. ─
+   ═════════════════════════════════════════════════════════════════════════════
+   id       : slug único — mismo nombre que la carpeta del juego en el repo
+   name     : nombre que se muestra en la web
+   status   : 'live' | 'soon'
+   url      : enlace completo de Play Store  (null mientras no publicado)
+   featured : true → ocupa la tarjeta grande; solo puede haber uno
+   genre    : clave de traducción  →  ver objeto T más abajo
+   accent   : color principal del icono  (#RRGGBB)
+   ════════════════════════════════════════════════════════════════════════════ */
+const GAMES = [
+  { id:'sudoku',      name:'Sudoku Puzzle', status:'live', url:'https://play.google.com/store/apps/details?id=com.aramis.sudoku', featured:true,  genre:'genre.logic',   accent:'#2C4E80' },
+  { id:'2048',        name:'2048',          status:'soon', url:null,                                                              featured:false, genre:'genre.number',  accent:'#E07D3C' },
+  { id:'wordle',      name:'Wordle',        status:'soon', url:null,                                                              featured:false, genre:'genre.word',    accent:'#538D4E' },
+  { id:'minesweeper', name:'Minesweeper',   status:'soon', url:null,                                                              featured:false, genre:'genre.logic',   accent:'#B44040' },
+  { id:'nonograms',   name:'Nonograms',     status:'soon', url:null,                                                              featured:false, genre:'genre.picture', accent:'#7040B4' },
+  { id:'wordsearch',  name:'Word Search',   status:'soon', url:null,                                                              featured:false, genre:'genre.word',    accent:'#3D5FA0' },
+  { id:'watersort',   name:'Water Sort',    status:'soon', url:null,                                                              featured:false, genre:'genre.color',   accent:'#2C8A7A' },
+  /* ── AÑADE AQUÍ LOS JUEGOS NUEVOS ── */
+];
+
+/* ════════════════════════════════════════════════════════════════════════════
+   ██  ICONOS  ██
+   SVG inline (viewBox 0 0 28 28) para cada juego del catálogo.
+   La clave debe coincidir con el campo `id` de GAMES.
+   El skill "update-website" añade la entrada al publicar un juego nuevo.
+   ════════════════════════════════════════════════════════════════════════════ */
+const ICONS = {
+  'sudoku':      `<svg width="26" height="26" viewBox="0 0 28 28" fill="none" aria-hidden="true"><rect x="2" y="2" width="11" height="11" rx="2" fill="#2C4E80" opacity="0.15"/><rect x="15" y="2" width="11" height="11" rx="2" fill="#2C4E80"/><rect x="2" y="15" width="11" height="11" rx="2" fill="#2C4E80"/><rect x="15" y="15" width="11" height="11" rx="2" fill="#2C4E80" opacity="0.15"/><text x="7.5" y="12" text-anchor="middle" fill="#2C4E80" font-size="7" font-weight="700" font-family="system-ui">7</text><text x="20.5" y="12" text-anchor="middle" fill="white" font-size="7" font-weight="700" font-family="system-ui">4</text><text x="7.5" y="25" text-anchor="middle" fill="white" font-size="7" font-weight="700" font-family="system-ui">9</text><text x="20.5" y="25" text-anchor="middle" fill="#2C4E80" font-size="7" font-weight="700" font-family="system-ui">2</text></svg>`,
+  '2048':        `<svg width="26" height="26" viewBox="0 0 28 28" fill="none" aria-hidden="true"><rect x="2" y="2" width="11" height="11" rx="2.5" fill="#E07D3C"/><rect x="15" y="2" width="11" height="11" rx="2.5" fill="#E07D3C" opacity="0.35"/><rect x="2" y="15" width="11" height="11" rx="2.5" fill="#E07D3C" opacity="0.35"/><rect x="15" y="15" width="11" height="11" rx="2.5" fill="#E07D3C" opacity="0.7"/></svg>`,
+  'wordle':      `<svg width="26" height="26" viewBox="0 0 28 28" fill="none" aria-hidden="true"><rect x="2" y="2" width="7" height="7" rx="1.5" fill="#538D4E" opacity="0.25"/><rect x="11" y="2" width="7" height="7" rx="1.5" fill="#C9B458"/><rect x="20" y="2" width="7" height="7" rx="1.5" fill="#538D4E"/><rect x="2" y="11" width="7" height="7" rx="1.5" fill="#538D4E"/><rect x="11" y="11" width="7" height="7" rx="1.5" fill="#538D4E" opacity="0.25"/><rect x="20" y="11" width="7" height="7" rx="1.5" fill="#538D4E" opacity="0.25"/></svg>`,
+  'minesweeper': `<svg width="26" height="26" viewBox="0 0 28 28" fill="none" aria-hidden="true"><circle cx="14" cy="14" r="7.5" fill="#B44040" opacity="0.85"/><line x1="14" y1="4.5" x2="14" y2="2" stroke="#B44040" stroke-width="2" stroke-linecap="round"/><line x1="14" y1="23.5" x2="14" y2="26" stroke="#B44040" stroke-width="2" stroke-linecap="round"/><line x1="4.5" y1="14" x2="2" y2="14" stroke="#B44040" stroke-width="2" stroke-linecap="round"/><line x1="23.5" y1="14" x2="26" y2="14" stroke="#B44040" stroke-width="2" stroke-linecap="round"/><line x1="7.5" y1="7.5" x2="6" y2="6" stroke="#B44040" stroke-width="2" stroke-linecap="round"/><line x1="20.5" y1="7.5" x2="22" y2="6" stroke="#B44040" stroke-width="2" stroke-linecap="round"/><circle cx="11.5" cy="11.5" r="2" fill="rgba(255,255,255,0.38)"/></svg>`,
+  'nonograms':   `<svg width="26" height="26" viewBox="0 0 28 28" fill="none" aria-hidden="true"><rect x="2" y="2" width="5" height="5" rx="1" fill="#7040B4"/><rect x="9" y="2" width="5" height="5" rx="1" fill="#7040B4" opacity="0.2"/><rect x="16" y="2" width="5" height="5" rx="1" fill="#7040B4"/><rect x="2" y="9" width="5" height="5" rx="1" fill="#7040B4" opacity="0.2"/><rect x="9" y="9" width="5" height="5" rx="1" fill="#7040B4"/><rect x="16" y="9" width="5" height="5" rx="1" fill="#7040B4" opacity="0.2"/><rect x="2" y="16" width="5" height="5" rx="1" fill="#7040B4"/><rect x="9" y="16" width="5" height="5" rx="1" fill="#7040B4"/><rect x="16" y="16" width="5" height="5" rx="1" fill="#7040B4" opacity="0.2"/></svg>`,
+  'wordsearch':  `<svg width="26" height="26" viewBox="0 0 28 28" fill="none" aria-hidden="true"><rect x="2" y="2" width="5" height="5" rx="1" fill="#3D5FA0" opacity="0.25"/><rect x="9" y="2" width="5" height="5" rx="1" fill="#3D5FA0"/><rect x="16" y="2" width="5" height="5" rx="1" fill="#3D5FA0" opacity="0.25"/><rect x="2" y="9" width="5" height="5" rx="1" fill="#3D5FA0" opacity="0.25"/><rect x="9" y="9" width="5" height="5" rx="1" fill="#3D5FA0"/><rect x="16" y="9" width="5" height="5" rx="1" fill="#3D5FA0" opacity="0.25"/><rect x="2" y="16" width="5" height="5" rx="1" fill="#3D5FA0" opacity="0.25"/><rect x="9" y="16" width="5" height="5" rx="1" fill="#3D5FA0" opacity="0.25"/><rect x="16" y="16" width="5" height="5" rx="1" fill="#3D5FA0"/><line x1="4.5" y1="4.5" x2="18.5" y2="18.5" stroke="#3D5FA0" stroke-width="2" stroke-linecap="round" opacity="0.55"/></svg>`,
+  'watersort':   `<svg width="26" height="26" viewBox="0 0 28 28" fill="none" aria-hidden="true"><circle cx="8" cy="10" r="5" fill="#2C8A7A" opacity="0.85"/><circle cx="20" cy="10" r="5" fill="#E07D3C" opacity="0.85"/><circle cx="14" cy="20" r="5" fill="#7040B4" opacity="0.85"/></svg>`,
+  /* ── AÑADE AQUÍ EL ICONO DE CADA JUEGO NUEVO ── */
+};
+
+/* ── helpers ── */
+function hexRgb(hex) {
+    return [parseInt(hex.slice(1,3),16), parseInt(hex.slice(3,5),16), parseInt(hex.slice(5,7),16)];
+}
+
+/* ── Render the non-featured games grid from GAMES config ── */
+function renderGrid(lang) {
+    const grid = document.getElementById('games-grid');
+    if (!grid) return;
+    grid.innerHTML = GAMES.filter(g => !g.featured).map(g => {
+        const [r,g2,b] = hexRgb(g.accent);
+        const icon     = ICONS[g.id] || '';
+        const genre    = (T[g.genre] && T[g.genre][lang]) || '';
+        const badgeTxt = g.status === 'live' ? (T['badge.live'][lang]||'Live now') : (T['badge.soon'][lang]||'Coming soon');
+        const badgeCls = g.status === 'live' ? 'badge--live' : 'badge--soon';
+        const playBtn  = (g.status === 'live' && g.url)
+            ? `<a href="${g.url}" target="_blank" rel="noopener" class="btn-play-sm"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 3.5v17c0 .83 1.01 1.3 1.6.8l13-8.5a1 1 0 000-1.6L6.6 2.7C6.01 2.2 5 2.67 5 3.5z"/></svg> Play Store</a>`
+            : '';
+        return `<article class="card${g.status==='live'?' card--live':''}"><div class="card__icon" style="background:rgba(${r},${g2},${b},0.11);">${icon}</div><div><div class="card__name">${g.name}</div><div class="card__genre">${genre}</div></div><div class="badge ${badgeCls}">${badgeTxt}</div>${playBtn}</article>`;
+    }).join('');
+}
+
+/* ── Sync featured card Play Store URL from GAMES config ── */
+function applyFeaturedUrl() {
+    const feat = GAMES.find(g => g.featured && g.url);
+    if (feat) { const el = document.getElementById('feat-play-link'); if (el) el.href = feat.url; }
+}
+
+/* ── Translations ── */
+const T = {
+  'nav.games':       { en:'Games',     es:'Juegos',     pt:'Jogos',       hi:'खेल',            ja:'ゲーム',            de:'Spiele',     it:'Giochi'       },
+  'nav.about':       { en:'About',     es:'Nosotros',   pt:'Sobre nós',   hi:'हमारे बारे में', ja:'について',          de:'Über uns',   it:'Chi siamo'    },
+  'nav.privacy':     { en:'Privacy',   es:'Privacidad', pt:'Privacidade', hi:'गोपनीयता',       ja:'プライバシー',       de:'Datenschutz',it:'Privacy'      },
+
+  'hero.tagline': {
+    en: 'The pleasure<br>of <em>thinking.</em>',
+    es: 'El placer<br>de <em>pensar.</em>',
+    pt: 'O prazer<br>de <em>pensar.</em>',
+    hi: 'सोचने का<br><em>आनंद।</em>',
+    ja: '考える<br><em>喜び。</em>',
+    de: 'Die Freude<br>am <em>Denken.</em>',
+    it: 'Il piacere<br>di <em>pensare.</em>'
+  },
+  'hero.sub': {
+    en: 'We craft puzzle games that demand your full attention — and reward every moment of it.',
+    es: 'Creamos puzzles que exigen toda tu atención — y recompensan cada momento.',
+    pt: 'Criamos jogos de puzzle que exigem toda a sua atenção — e recompensam cada momento.',
+    hi: 'हम पहेली खेल बनाते हैं जो आपका पूरा ध्यान मांगते हैं — और हर पल को सार्थक बनाते हैं।',
+    ja: '全集中力を要求し、その一瞬一瞬に報いるパズルゲームを作っています。',
+    de: 'Wir entwickeln Puzzlespiele, die deine volle Aufmerksamkeit fordern — und jeden Moment belohnen.',
+    it: 'Creiamo giochi di puzzle che richiedono la tua piena attenzione — e premiano ogni momento.'
+  },
+  'hero.cta': {
+    en: 'Explore our games',
+    es: 'Descubre nuestros juegos',
+    pt: 'Explorar nossos jogos',
+    hi: 'हमारे खेल देखें',
+    ja: 'ゲームを見る',
+    de: 'Unsere Spiele entdecken',
+    it: 'Scopri i nostri giochi'
+  },
+  'hero.scroll': { en:'scroll', es:'bajar', pt:'rolar', hi:'नीचे', ja:'スクロール', de:'scrollen', it:'scorri' },
+
+  'sec.games.ey': {
+    en:'The Collection', es:'La colección', pt:'A coleção',
+    hi:'संग्रह', ja:'コレクション', de:'Die Sammlung', it:'La collezione'
+  },
+  'sec.games.title': {
+    en:'Games for every kind of thinker',
+    es:'Juegos para todo tipo de mente',
+    pt:'Jogos para todo tipo de pensador',
+    hi:'हर तरह के विचारक के लिए खेल',
+    ja:'すべての思考タイプに合うゲーム',
+    de:'Spiele für jeden Denkertyp',
+    it:'Giochi per ogni tipo di pensatore'
+  },
+  'sec.games.sub': {
+    en: 'One published, more on the way. Each one a complete experience — nothing more, nothing less.',
+    es: 'Uno publicado, más en camino. Cada uno una experiencia completa — nada más, nada menos.',
+    pt: 'Um publicado, mais a caminho. Cada um uma experiência completa — nada mais, nada menos.',
+    hi: 'एक प्रकाशित, और आ रहे हैं। हर एक एक पूर्ण अनुभव — न कम, न ज़्यादा।',
+    ja: '1つ公開済み、さらに続々登場。それぞれが完全な体験 — それ以上でも以下でもなく。',
+    de: 'Eines veröffentlicht, mehr kommen. Jedes ein vollständiges Erlebnis — nicht mehr, nicht weniger.',
+    it: 'Uno pubblicato, altri in arrivo. Ognuno un\'esperienza completa — niente di più, niente di meno.'
+  },
+  'badge.live': { en:'Live now',    es:'Disponible', pt:'Disponível', hi:'उपलब्ध',    ja:'配信中',   de:'Verfügbar',  it:'Disponibile'   },
+  'badge.soon': { en:'Coming soon', es:'Próximamente',pt:'Em breve',   hi:'जल्द आएगा',ja:'近日公開', de:'Demnächst',  it:'Prossimamente' },
+
+  'feat.desc': {
+    en: 'The classic logic puzzle, done right. Four difficulty levels, a clean interface, and a timer that only matters when you want it to. No tricks — just the grid and you.',
+    es: 'El puzzle lógico clásico, bien hecho. Cuatro niveles de dificultad, una interfaz limpia y un cronómetro que solo importa cuando tú quieres. Sin trucos — solo la cuadrícula y tú.',
+    pt: 'O puzzle lógico clássico, bem feito. Quatro níveis de dificuldade, uma interface limpa e um cronômetro que só importa quando você quer. Sem truques — só a grade e você.',
+    hi: 'क्लासिक लॉजिक पहेली, सही तरीके से। चार कठिनाई स्तर, एक साफ इंटरफ़ेस और एक टाइमर जो तभी मायने रखता है जब आप चाहें। कोई चाल नहीं — बस ग्रिड और आप।',
+    ja: '定番ロジックパズルを正しいかたちで。4段階の難易度、シンプルなインターフェース、必要なときだけ動くタイマー。トリックなし — あなたとグリッドだけ。',
+    de: 'Das klassische Logikrätsel, richtig gemacht. Vier Schwierigkeitsgrade, eine aufgeräumte Oberfläche und ein Timer, der nur zählt, wenn du es willst. Keine Tricks — nur das Gitter und du.',
+    it: 'Il classico puzzle logico, fatto come si deve. Quattro livelli di difficoltà, un\'interfaccia pulita e un timer che conta solo quando vuoi. Niente trucchi — solo la griglia e te.'
+  },
+  'feat.play': {
+    en:'Get it on Google Play',
+    es:'Consíguelo en Google Play',
+    pt:'Baixar no Google Play',
+    hi:'Google Play पर पाएं',
+    ja:'Google Playで入手',
+    de:'Bei Google Play herunterladen',
+    it:'Scarica su Google Play'
+  },
+
+  'genre.number': { en:'Number puzzle', es:'Puzzle numérico', pt:'Puzzle numérico', hi:'संख्या पहेली', ja:'数字パズル',          de:'Zahlenrätsel',   it:'Puzzle numerico'        },
+  'genre.word':   { en:'Word puzzle',   es:'Puzzle de palabras',pt:'Puzzle de palavras',hi:'शब्द पहेली',ja:'言葉パズル',        de:'Worträtsel',     it:'Puzzle di parole'       },
+  'genre.logic':  { en:'Logic puzzle',  es:'Puzzle lógico',    pt:'Puzzle lógico',   hi:'तर्क पहेली',  ja:'論理パズル',          de:'Logikrätsel',    it:'Puzzle logico'          },
+  'genre.picture':{ en:'Picture logic', es:'Lógica de imagen', pt:'Lógica de imagem',hi:'चित्र तर्क',  ja:'ピクチャーロジック',  de:'Bilderrätsel',   it:'Logica per immagini'    },
+  'genre.color':  { en:'Color puzzle',  es:'Puzzle de colores',pt:'Puzzle de cores', hi:'रंग पहेली',   ja:'カラーパズル',        de:'Farbrätsel',     it:'Puzzle di colori'       },
+
+  'sec.about.ey': {
+    en:'Our philosophy', es:'Nuestra filosofía', pt:'Nossa filosofia',
+    hi:'हमारा दर्शन', ja:'私たちの理念', de:'Unsere Philosophie', it:'La nostra filosofia'
+  },
+  'about.title': {
+    en: 'A good puzzle is worth<br><em>a thousand features.</em>',
+    es: 'Un buen puzzle vale<br><em>más que mil funciones.</em>',
+    pt: 'Um bom puzzle vale<br><em>mil funcionalidades.</em>',
+    hi: 'एक अच्छी पहेली<br><em>हजार सुविधाओं से बेहतर है।</em>',
+    ja: '良いパズルは<br><em>千の機能に勝る。</em>',
+    de: 'Ein gutes Rätsel ist<br><em>mehr wert als tausend Funktionen.</em>',
+    it: 'Un buon puzzle vale<br><em>mille funzionalità.</em>'
+  },
+  'about.sub': {
+    en: "No subscriptions. No energy bars. No guilt trips. Just you and a puzzle that's genuinely worth your time.",
+    es: 'Sin suscripciones. Sin barras de energía. Sin remordimientos. Solo tú y un puzzle que de verdad merece tu tiempo.',
+    pt: 'Sem assinaturas. Sem barras de energia. Sem culpa. Só você e um puzzle que realmente merece o seu tempo.',
+    hi: 'कोई सदस्यता नहीं। कोई एनर्जी बार नहीं। कोई अपराध बोध नहीं। बस आप और एक पहेली जो वाकई आपके समय के लायक है।',
+    ja: 'サブスクなし。エネルギーバーなし。罪悪感なし。あなたと、本当に時間をかける価値のあるパズルだけ。',
+    de: 'Keine Abos. Keine Energiebalken. Kein schlechtes Gewissen. Nur du und ein Rätsel, das deine Zeit wirklich wert ist.',
+    it: 'Nessun abbonamento. Nessuna barra energia. Nessun senso di colpa. Solo tu e un puzzle che vale davvero il tuo tempo.'
+  },
+
+  'p1.title': { en:'Focus',    es:'Enfoque',   pt:'Foco',     hi:'ध्यान',    ja:'集中',    de:'Fokus',     it:'Concentrazione' },
+  'p1.body': {
+    en: 'Every screen does one thing. No dark patterns, no notification traps, no endless loops designed to steal another hour. You play when you want to — and stop just as easily.',
+    es: 'Cada pantalla hace una cosa. Sin patrones oscuros, sin trampas de notificaciones, sin bucles infinitos para robarte otra hora. Juegas cuando quieres — y paras igual de fácil.',
+    pt: 'Cada tela faz uma coisa. Sem dark patterns, sem armadilhas de notificações, sem loops infinitos para roubar mais uma hora. Você joga quando quer — e para com a mesma facilidade.',
+    hi: 'हर स्क्रीन एक काम करती है। कोई डार्क पैटर्न नहीं, कोई नोटिफिकेशन ट्रैप नहीं, कोई अंतहीन लूप नहीं। आप तब खेलते हैं जब चाहें — और उतनी ही आसानी से रुक जाते हैं।',
+    ja: '各画面は一つのことだけ。ダークパターンなし、通知トラップなし、時間を奪う無限ループなし。遊びたいときに遊んで、同じくらい簡単にやめられます。',
+    de: 'Jeder Bildschirm tut eine Sache. Keine Dark Patterns, keine Benachrichtigungsfallen, keine Endlosschleifen. Du spielst, wann du willst — und hörst genauso leicht auf.',
+    it: 'Ogni schermata fa una cosa sola. Nessun dark pattern, nessuna trappola di notifiche, nessun loop infinito. Giochi quando vuoi — e smetti con la stessa facilità.'
+  },
+  'p2.title': { en:'Craft',    es:'Cuidado',   pt:'Cuidado',  hi:'शिल्प',    ja:'こだわり', de:'Handwerk',  it:'Cura'           },
+  'p2.body': {
+    en: "We obsess over the small things — the timing of an animation, the weight of a tap, the exact moment a completed row should flash. Details aren't extras. They're the whole point.",
+    es: 'Nos obsesionamos con los pequeños detalles — el tiempo de una animación, el peso de un toque, el momento exacto en que debe brillar una fila completada. Los detalles no son extras. Son el punto.',
+    pt: 'Somos obcecados pelos detalhes — o timing de uma animação, o peso de um toque, o exato momento em que uma linha completa deve piscar. Detalhes não são extras. São o ponto central.',
+    hi: 'हम छोटी चीज़ों पर ध्यान देते हैं — एनिमेशन का समय, टैप का वज़न, पूरी पंक्ति चमकने का सटीक क्षण। विवरण अतिरिक्त नहीं हैं। वे ही मुख्य बात हैं।',
+    ja: '細部にこだわります — アニメーションのタイミング、タップの重さ、完成した行が光る瞬間。細部はおまけではありません。それこそが本質です。',
+    de: 'Wir besessen uns über die kleinen Dinge — das Timing einer Animation, das Gewicht eines Taps, der genaue Moment, in dem eine Reihe aufblitzt. Details sind kein Beiwerk. Sie sind der Kern.',
+    it: "Siamo ossessionati dai piccoli dettagli — il timing di un'animazione, il peso di un tocco, l'esatto momento in cui una riga deve lampeggiare. I dettagli non sono optional. Sono il punto."
+  },
+  'p3.title': { en:'Timeless', es:'Atemporal', pt:'Atemporal', hi:'कालातीत', ja:'不変',    de:'Zeitlos',   it:'Senza tempo'    },
+  'p3.body': {
+    en: "Logic puzzles have been captivating minds for centuries. We're not chasing trends or manufacturing seasons. We build games people will still want to play years from now.",
+    es: 'Los puzzles lógicos han fascinado mentes durante siglos. No perseguimos tendencias ni fabricamos temporadas. Creamos juegos que la gente querrá seguir jugando años después.',
+    pt: 'Puzzles lógicos têm fascinado mentes há séculos. Não perseguimos tendências nem criamos temporadas. Construímos jogos que as pessoas ainda vão querer jogar anos depois.',
+    hi: 'लॉजिक पहेलियाँ सदियों से मनों को आकर्षित करती रही हैं। हम ट्रेंड का पीछा नहीं करते। हम ऐसे खेल बनाते हैं जिन्हें लोग आने वाले वर्षों में भी खेलना चाहेंगे।',
+    ja: 'ロジックパズルは何世紀にもわたって人々を魅了してきました。私たちはトレンドを追いません。何年後でも楽しみたいと思えるゲームを作ります。',
+    de: 'Logikrätsel faszinieren Menschen seit Jahrhunderten. Wir jagen keinen Trends und erschaffen keine Saisons. Wir bauen Spiele, die die Leute noch Jahre später spielen wollen.',
+    it: 'I puzzle logici affascinano le menti da secoli. Non inseguiamo le tendenze né creiamo stagioni. Costruiamo giochi che le persone vorranno ancora giocare anni dopo.'
+  },
+
+  'footer.games':   { en:'Games',          es:'Juegos',                   pt:'Jogos',                  hi:'खेल',               ja:'ゲーム',              de:'Spiele',       it:'Giochi'              },
+  'footer.about':   { en:'About',           es:'Nosotros',                 pt:'Sobre nós',              hi:'हमारे बारे में',    ja:'について',            de:'Über uns',     it:'Chi siamo'           },
+  'footer.privacy': { en:'Privacy Policy',  es:'Política de privacidad',   pt:'Política de privacidade',hi:'गोपनीयता नीति',    ja:'プライバシーポリシー', de:'Datenschutz',  it:'Informativa privacy' },
+  'footer.contact': { en:'Contact',         es:'Contacto',                 pt:'Contato',                hi:'संपर्क',             ja:'お問い合わせ',        de:'Kontakt',      it:'Contatti'            },
+  'footer.copy': {
+    en: '© 2026 Soyaramis Games · Made in Madrid',
+    es: '© 2026 Soyaramis Games · Hecho en Madrid',
+    pt: '© 2026 Soyaramis Games · Feito em Madrid',
+    hi: '© 2026 Soyaramis Games · मैड्रिड में बनाया',
+    ja: '© 2026 Soyaramis Games · マドリードで制作',
+    de: '© 2026 Soyaramis Games · Hergestellt in Madrid',
+    it: '© 2026 Soyaramis Games · Fatto a Madrid'
+  }
+};
+
+/* ── i18n engine ── */
+function setLang(lang) {
+    document.documentElement.lang = lang;
+    localStorage.setItem('ag-lang', lang);
+
+    document.querySelectorAll('[data-t]').forEach(el => {
+        const v = T[el.dataset.t];
+        if (v && v[lang] != null) el.textContent = v[lang];
+    });
+    document.querySelectorAll('[data-t-html]').forEach(el => {
+        const v = T[el.dataset.tHtml];
+        if (v && v[lang] != null) el.innerHTML = v[lang];
+    });
+
+    renderGrid(lang);
+    document.getElementById('langCode').textContent = lang.toUpperCase();
+    document.querySelectorAll('#langDrop li button').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.l === lang);
+    });
+    document.getElementById('langDrop').classList.remove('open');
+}
+
+/* ── Language picker ── */
+document.getElementById('langBtn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    document.getElementById('langDrop').classList.toggle('open');
+});
+document.addEventListener('click', function() {
+    document.getElementById('langDrop').classList.remove('open');
+});
+document.querySelectorAll('#langDrop li button').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        setLang(this.dataset.l);
+    });
+});
+
+/* ── Nav glass on scroll ── */
+const nav = document.getElementById('nav');
+const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 50);
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+/* ── Init language + featured URL ── */
+(function() {
+    applyFeaturedUrl();
+    const saved = localStorage.getItem('ag-lang');
+    const valid = Object.keys(T['nav.games']);
+    if (saved && valid.includes(saved)) { setLang(saved); return; }
+    const browser = (navigator.language || 'en').split('-')[0].toLowerCase();
+    setLang(valid.includes(browser) ? browser : 'en');
+})();
+</script>
+
+</body>
+</html>
