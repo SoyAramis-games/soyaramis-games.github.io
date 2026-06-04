@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Política de Privacidad — Aramis Games</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FAFAF8;
+            --surface: #FFFFFF;
+            --text-primary: #1A1A1A;
+            --text-secondary: #555555;
+            --accent: #2C5F8A;
+            --accent-light: #E8F0F7;
+            --border: #E5E5E0;
+            --radius: 10px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.75;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+        }
+
+        .header__brand {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.1rem;
+            color: var(--accent);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .header__title {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(1.8rem, 5vw, 2.6rem);
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .header__updated {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .container {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem 5rem;
+        }
+
+        .toc {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.8rem 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .toc__title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.15rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .toc ol {
+            padding-left: 1.2rem;
+        }
+
+        .toc li {
+            margin-bottom: 0.4rem;
+        }
+
+        .toc a {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        .section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section__heading {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.45rem;
+            color: var(--text-primary);
+            margin-bottom: 0.8rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-light);
+        }
+
+        .section__subheading {
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: var(--text-primary);
+            margin: 1.3rem 0 0.5rem;
+        }
+
+        .section p {
+            color: var(--text-secondary);
+            margin-bottom: 0.9rem;
+        }
+
+        .section ul {
+            color: var(--text-secondary);
+            padding-left: 1.4rem;
+            margin-bottom: 0.9rem;
+        }
+
+        .section ul li {
+            margin-bottom: 0.35rem;
+        }
+
+        .callout {
+            background: var(--accent-light);
+            border-left: 4px solid var(--accent);
+            border-radius: 0 var(--radius) var(--radius) 0;
+            padding: 1.1rem 1.4rem;
+            margin: 1.2rem 0;
+        }
+
+        .callout p {
+            color: var(--accent) !important;
+            font-weight: 500;
+            margin-bottom: 0 !important;
+            font-size: 0.95rem;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.93rem;
+        }
+
+        th {
+            text-align: left;
+            background: var(--accent-light);
+            color: var(--accent);
+            font-weight: 600;
+            padding: 0.75rem 1rem;
+        }
+
+        td {
+            padding: 0.7rem 1rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
+        }
+
+        th:first-child {
+            border-radius: var(--radius) 0 0 0;
+        }
+
+        th:last-child {
+            border-radius: 0 var(--radius) 0 0;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        a {
+            color: var(--accent);
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                padding: 2rem 1rem;
+            }
+
+            .container {
+                padding: 1.5rem 1rem 3rem;
+            }
+
+            .toc {
+                padding: 1.3rem 1.2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="header__brand">Aramis Games</div>
+        <h1 class="header__title">Política de Privacidad</h1>
+        <p class="header__updated">Última actualización: 22/03/026</p>
+    </header>
+
+    <main class="container">
+
+        <nav class="toc">
+            <div class="toc__title">Índice</div>
+            <ol>
+                <li><a href="#introduccion">Introducción</a></li>
+                <li><a href="#responsable">Responsable del tratamiento</a></li>
+                <li><a href="#datos">Datos que recopilamos</a></li>
+                <li><a href="#anuncios">Publicidad y servicios de terceros</a></li>
+                <li><a href="#finalidad">Finalidad y base legal</a></li>
+                <li><a href="#menores">Protección de menores</a></li>
+                <li><a href="#derechos">Tus derechos</a></li>
+                <li><a href="#retencion">Retención de datos</a></li>
+                <li><a href="#seguridad">Seguridad</a></li>
+                <li><a href="#transferencias">Transferencias internacionales</a></li>
+                <li><a href="#cambios">Cambios en esta política</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ol>
+        </nav>
+
+        <!-- 1 -->
+        <section class="section" id="introduccion">
+            <h2 class="section__heading">1. Introducción</h2>
+            <p>En <strong>Aramis Games</strong> nos tomamos muy en serio tu privacidad. Esta Política de Privacidad
+                describe cómo recopilamos, usamos y protegemos la información cuando utilizas cualquiera de nuestras
+                aplicaciones móviles (en adelante, "los Juegos"), tanto en sus versiones gratuitas con publicidad como
+                en sus versiones de pago sin publicidad.</p>
+            <p>Esta política se aplica de forma unificada a todos los Juegos publicados bajo la marca <strong>Aramis
+                    Games</strong> en Google Play Store.</p>
+            <p>Al descargar, instalar o utilizar cualquiera de nuestros Juegos, aceptas las prácticas descritas en esta
+                Política de Privacidad.</p>
+        </section>
+
+        <!-- 2 -->
+        <section class="section" id="responsable">
+            <h2 class="section__heading">2. Responsable del tratamiento</h2>
+            <p>El responsable del tratamiento de los datos personales es:</p>
+            <ul>
+                <li><strong>Nombre:</strong> Aramis Games</li>
+                <li><strong>Correo electrónico:</strong> soyaramis.games@gmail.com</li>
+                <li><strong>Ubicación:</strong> Madrid, España</li>
+            </ul>
+        </section>
+
+        <!-- 3 -->
+        <section class="section" id="datos">
+            <h2 class="section__heading">3. Datos que recopilamos</h2>
+
+            <div class="section__subheading">Versiones de pago (sin publicidad)</div>
+            <p>Nuestras versiones de pago <strong>no recopilan ningún dato personal</strong>. No utilizan servicios de
+                publicidad ni herramientas de analítica que recojan información del usuario.</p>
+
+            <div class="section__subheading">Versiones gratuitas (con publicidad)</div>
+            <p>Nuestras versiones gratuitas muestran anuncios a través de <strong>Google AdMob</strong>. Nosotros no
+                recopilamos datos personales directamente, pero el SDK de Google AdMob puede recopilar automáticamente
+                cierta información con el fin de mostrar anuncios relevantes. Estos datos pueden incluir:</p>
+            <ul>
+                <li>Identificadores del dispositivo (como el identificador de publicidad de Android).</li>
+                <li>Dirección IP (puede usarse para determinar la ubicación aproximada).</li>
+                <li>Información técnica del dispositivo (modelo, sistema operativo, versión, idioma, resolución de
+                    pantalla).</li>
+                <li>Datos de interacción con los anuncios (impresiones, clics).</li>
+                <li>Cookies o tecnologías similares de seguimiento.</li>
+            </ul>
+
+            <div class="callout">
+                <p>Nosotros como desarrolladores NO tenemos acceso directo a los datos personales recopilados por Google
+                    AdMob. Dicha recopilación está sujeta a la política de privacidad de Google.</p>
+            </div>
+        </section>
+
+        <!-- 4 -->
+        <section class="section" id="anuncios">
+            <h2 class="section__heading">4. Publicidad y servicios de terceros</h2>
+            <p>Las versiones gratuitas de nuestros Juegos utilizan el siguiente servicio de publicidad de terceros:</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Servicio</th>
+                            <th>Proveedor</th>
+                            <th>Política de privacidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Google AdMob</td>
+                            <td>Google LLC</td>
+                            <td><a href="https://policies.google.com/privacy" target="_blank"
+                                    rel="noopener">policies.google.com/privacy</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>Google AdMob puede utilizar tecnologías de seguimiento para ofrecer anuncios personalizados o no
+                personalizados, según el consentimiento del usuario y la configuración de la aplicación.</p>
+            <p>Puedes obtener más información sobre cómo Google utiliza la información en: <a
+                    href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">Cómo
+                    usa Google la información de sitios o apps que utilizan sus servicios</a>.</p>
+        </section>
+
+        <!-- 5 -->
+        <section class="section" id="finalidad">
+            <h2 class="section__heading">5. Finalidad y base legal</h2>
+            <p>Los datos recopilados por los servicios de terceros integrados en nuestros Juegos se utilizan
+                exclusivamente para:</p>
+            <ul>
+                <li><strong>Mostrar publicidad</strong> en las versiones gratuitas (anuncios personalizados o no
+                    personalizados según tu consentimiento).</li>
+                <li><strong>Prevención de fraude y seguridad</strong> del servicio publicitario.</li>
+            </ul>
+
+            <p>Las bases legales para el tratamiento de datos, conforme al Reglamento General de Protección de Datos
+                (RGPD) de la UE, son:</p>
+            <ul>
+                <li><strong>Consentimiento (Art. 6.1.a RGPD):</strong> Para la publicidad personalizada, se solicitará
+                    tu consentimiento explícito antes de recopilar datos con este fin. En la Unión Europea, esto se
+                    gestiona a través del marco de transparencia y consentimiento (TCF) de Google.</li>
+                <li><strong>Interés legítimo (Art. 6.1.f RGPD):</strong> Para la publicidad no personalizada y el
+                    funcionamiento básico de los servicios de terceros.</li>
+            </ul>
+        </section>
+
+        <!-- 6 -->
+        <section class="section" id="menores">
+            <h2 class="section__heading">6. Protección de menores</h2>
+            <p>Algunos de nuestros Juegos pueden resultar atractivos para usuarios de todas las edades, incluyendo
+                menores de edad. Nos comprometemos a proteger la privacidad de los niños y cumplimos con:</p>
+            <ul>
+                <li>El <strong>Reglamento General de Protección de Datos (RGPD)</strong> de la UE, que establece los 16
+                    años como edad mínima para prestar consentimiento al tratamiento de datos personales (o la edad que
+                    establezca cada Estado miembro, siendo 14 años en España conforme a la LOPDGDD).</li>
+                <li>La <strong>Ley de Protección de la Privacidad Infantil en Internet (COPPA)</strong> de Estados
+                    Unidos, aplicable a menores de 13 años.</li>
+            </ul>
+
+            <div class="callout">
+                <p>En los Juegos clasificados para todas las edades o dirigidos a público infantil, configuramos Google
+                    AdMob para mostrar únicamente anuncios aptos para menores y desactivamos la publicidad
+                    personalizada, de conformidad con las políticas de familias de Google Play y la normativa COPPA.</p>
+            </div>
+
+            <p>No recopilamos de forma consciente información personal de menores de 14 años (en España) o de 13 años
+                (en Estados Unidos). Si eres padre, madre o tutor legal y crees que tu hijo nos ha proporcionado
+                información personal, te rogamos que te pongas en contacto con nosotros para que podamos tomar las
+                medidas necesarias.</p>
+        </section>
+
+        <!-- 7 -->
+        <section class="section" id="derechos">
+            <h2 class="section__heading">7. Tus derechos</h2>
+            <p>Si te encuentras en el Espacio Económico Europeo (EEE), tienes los siguientes derechos conforme al RGPD:
+            </p>
+            <ul>
+                <li><strong>Acceso:</strong> Solicitar información sobre si tratamos tus datos personales y obtener una
+                    copia.</li>
+                <li><strong>Rectificación:</strong> Corregir datos inexactos o incompletos.</li>
+                <li><strong>Supresión:</strong> Solicitar la eliminación de tus datos personales ("derecho al olvido").
+                </li>
+                <li><strong>Limitación:</strong> Solicitar la restricción del tratamiento en determinadas
+                    circunstancias.</li>
+                <li><strong>Portabilidad:</strong> Recibir tus datos en un formato estructurado y de uso común.</li>
+                <li><strong>Oposición:</strong> Oponerte al tratamiento basado en interés legítimo.</li>
+                <li><strong>Retirada del consentimiento:</strong> Retirar tu consentimiento en cualquier momento sin que
+                    ello afecte a la licitud del tratamiento previo.</li>
+            </ul>
+
+            <p>Para ejercer cualquiera de estos derechos, puedes contactarnos en
+                <strong>soyaramis.games@gmail.com</strong>.</p>
+            <p>Asimismo, puedes gestionar las preferencias de publicidad personalizada de Google desde la configuración
+                de tu dispositivo Android: <em>Ajustes &gt; Google &gt; Anuncios &gt; Desactivar personalización de
+                    anuncios</em>.</p>
+            <p>También tienes derecho a presentar una reclamación ante la <strong>Agencia Española de Protección de
+                    Datos (AEPD)</strong> en <a href="https://www.aepd.es" target="_blank"
+                    rel="noopener">www.aepd.es</a> si consideras que tus derechos han sido vulnerados.</p>
+        </section>
+
+        <!-- 8 -->
+        <section class="section" id="retencion">
+            <h2 class="section__heading">8. Retención de datos</h2>
+            <p>Dado que nosotros no recopilamos datos personales directamente, no almacenamos información del usuario en
+                nuestros servidores.</p>
+            <p>Los datos recopilados por Google AdMob se retienen conforme a las políticas de retención de Google.
+                Puedes consultar más información en la <a href="https://policies.google.com/technologies/retention"
+                    target="_blank" rel="noopener">política de retención de datos de Google</a>.</p>
+        </section>
+
+        <!-- 9 -->
+        <section class="section" id="seguridad">
+            <h2 class="section__heading">9. Seguridad</h2>
+            <p>Aunque no recopilamos datos personales directamente, nos comprometemos a utilizar los servicios de
+                terceros de forma responsable y conforme a sus directrices de seguridad. Google AdMob implementa medidas
+                de seguridad técnicas y organizativas para proteger los datos que recopila.</p>
+            <p>No obstante, ningún método de transmisión o almacenamiento electrónico es completamente seguro, por lo
+                que no podemos garantizar la seguridad absoluta de los datos gestionados por terceros.</p>
+        </section>
+
+        <!-- 10 -->
+        <section class="section" id="transferencias">
+            <h2 class="section__heading">10. Transferencias internacionales</h2>
+            <p>Google LLC tiene su sede en Estados Unidos. Al utilizar las versiones gratuitas de nuestros Juegos, los
+                datos recopilados por Google AdMob pueden transferirse y procesarse fuera del Espacio Económico Europeo,
+                incluidos los Estados Unidos.</p>
+            <p>Google cuenta con mecanismos de transferencia adecuados conforme al RGPD, incluyendo Cláusulas
+                Contractuales Tipo aprobadas por la Comisión Europea. Puedes consultar más información en el <a
+                    href="https://policies.google.com/privacy/frameworks" target="_blank" rel="noopener">marco de
+                    privacidad de Google</a>.</p>
+        </section>
+
+        <!-- 11 -->
+        <section class="section" id="cambios">
+            <h2 class="section__heading">11. Cambios en esta política</h2>
+            <p>Nos reservamos el derecho a actualizar esta Política de Privacidad en cualquier momento. Cualquier cambio
+                será publicado en esta misma página con una nueva fecha de "última actualización".</p>
+            <p>Te recomendamos revisar esta política periódicamente. El uso continuado de nuestros Juegos después de la
+                publicación de cambios constituye tu aceptación de los mismos.</p>
+        </section>
+
+        <!-- 12 -->
+        <section class="section" id="contacto">
+            <h2 class="section__heading">12. Contacto</h2>
+            <p>Si tienes preguntas, dudas o deseas ejercer alguno de tus derechos en relación con esta Política de
+                Privacidad, puedes contactarnos en:</p>
+            <ul>
+                <li><strong>Correo electrónico:</strong> soyaramis.games@gmail.com</li>
+            </ul>
+            <p>Nos comprometemos a responder en un plazo máximo de 30 días.</p>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        &copy; 2026 Aramis Games. Todos los derechos reservados.
+    </footer>
+
+</body>
+
+</html>
