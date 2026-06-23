@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "updated": "2026-06-14",
+  "games": [
+    { "id": "sudoku",      "appId": "com.aramis.sudoku",      "name": "Sudoku Puzzle", "genre": "logic",   "accent": "#2C4E80", "status": "live", "url": "https://play.google.com/store/apps/details?id=com.aramis.sudoku", "icon": null },
+    { "id": "puzzle2048",  "appId": "com.aramis.puzzle2048",  "name": "2048 Merge",    "genre": "number",  "accent": "#C25E12", "status": "soon", "url": null, "icon": null },
+    { "id": "wordle",      "appId": "com.aramis.wordle",      "name": "Wordle",        "genre": "word",    "accent": "#538D4E", "status": "soon", "url": null, "icon": null },
+    { "id": "minesweeper", "appId": "com.aramis.minesweeper", "name": "Minesweeper",   "genre": "logic",   "accent": "#B44040", "status": "soon", "url": null, "icon": null },
+    { "id": "nonograms",   "appId": "com.aramis.nonograms",   "name": "Nonograms",     "genre": "picture", "accent": "#7040B4", "status": "soon", "url": null, "icon": null },
+    { "id": "wordsearch",  "appId": "com.aramis.wordsearch",  "name": "Word Search",   "genre": "word",    "accent": "#3D5FA0", "status": "soon", "url": null, "icon": null },
+    { "id": "watersort",   "appId": "com.aramis.watersort",   "name": "Water Sort",    "genre": "color",   "accent": "#2C8A7A", "status": "soon", "url": null, "icon": null }
+  ]
+}
