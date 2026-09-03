@@ -298,6 +298,8 @@
             background-size: 22px 22px;
         }
         .feat__info { padding: 3rem 3rem 3rem 2.5rem; display: flex; flex-direction: column; justify-content: center; }
+        .feat__mark { position: relative; z-index: 1; opacity: 0.9; }
+        .feat__mark svg { width: 130px; height: 130px; }
 
         .badge {
             display: inline-flex; align-items: center; gap: 0.4rem;
@@ -321,10 +323,8 @@
         }
         .btn-play:hover { background: var(--blue); transform: translateY(-1px); }
 
-        .games__lists { display: flex; flex-direction: column; gap: 1.4rem; }
+        /* Upcoming games: compact tiles under the published cards. */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 1.1rem; }
-        /* Published games get room to breathe; unreleased ones stay compact. */
-        .grid--live { grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 1.3rem; }
         .grid--soon { grid-template-columns: repeat(auto-fill, minmax(152px, 1fr)); gap: 0.9rem; }
         .card {
             background: var(--white); border: 1px solid var(--border);
@@ -339,12 +339,6 @@
         .card__desc  { font-size: 0.85rem; color: var(--muted); line-height: 1.65; margin-top: -0.15rem; }
 
         .card .badge { margin-bottom: 0; }
-        .card--big { padding: 2.1rem 2rem 1.9rem; gap: 1rem; }
-        .card--big .card__icon { width: 62px; height: 62px; border-radius: 15px; }
-        .card--big .card__icon svg { width: 34px; height: 34px; }
-        .card--big .card__name { font-size: 1.45rem; }
-        .card--big .card__genre { font-size: 0.82rem; margin-top: -0.2rem; }
-        .card--big .badge { margin-top: auto; }
 
         .card--sm { padding: 1.2rem 1.1rem 1.15rem; gap: 0.65rem; }
         .card--sm .card__icon { width: 36px; height: 36px; border-radius: 9px; }
@@ -423,10 +417,7 @@
             .games { padding: 4rem 1.4rem; }
             .about { padding: 5rem 1.4rem; }
         }
-        @media (max-width: 480px) {
-            .grid--soon { grid-template-columns: repeat(2, 1fr); }
-            .grid--live { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 480px) { .grid--soon { grid-template-columns: repeat(2, 1fr); } }
     </style>
 </head>
 
@@ -591,48 +582,10 @@
             <p class="s-sub" data-t="sec.games.sub">Three published, more on the way. Each one a complete experience — nothing more, nothing less.</p>
         </div>
 
-        <article class="feat">
-            <div class="feat__visual">
-                <svg width="210" height="210" viewBox="0 0 210 210" fill="none"
-                     style="position:relative;z-index:1;" aria-hidden="true">
-                    <rect x="8"   y="8"   width="60" height="60" rx="7" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.13)" stroke-width="1"/>
-                    <rect x="75"  y="8"   width="60" height="60" rx="7" fill="rgba(44,95,138,0.35)"  stroke="rgba(74,144,200,0.45)" stroke-width="1"/>
-                    <rect x="142" y="8"   width="60" height="60" rx="7" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.13)" stroke-width="1"/>
-                    <rect x="8"   y="75"  width="60" height="60" rx="7" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.13)" stroke-width="1"/>
-                    <rect x="75"  y="75"  width="60" height="60" rx="7" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.13)" stroke-width="1"/>
-                    <rect x="142" y="75"  width="60" height="60" rx="7" fill="rgba(44,95,138,0.35)"  stroke="rgba(74,144,200,0.45)" stroke-width="1"/>
-                    <rect x="8"   y="142" width="60" height="60" rx="7" fill="rgba(192,113,58,0.28)" stroke="rgba(192,113,58,0.55)" stroke-width="1"/>
-                    <rect x="75"  y="142" width="60" height="60" rx="7" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.13)" stroke-width="1"/>
-                    <rect x="142" y="142" width="60" height="60" rx="7" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.13)" stroke-width="1"/>
-                    <text x="38"  y="47"  text-anchor="middle" fill="rgba(255,255,255,0.22)" font-family="DM Serif Display,serif" font-size="30">7</text>
-                    <text x="105" y="47"  text-anchor="middle" fill="rgba(255,255,255,0.85)" font-family="DM Serif Display,serif" font-size="30">4</text>
-                    <text x="172" y="47"  text-anchor="middle" fill="rgba(255,255,255,0.22)" font-family="DM Serif Display,serif" font-size="30">2</text>
-                    <text x="38"  y="114" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-family="DM Serif Display,serif" font-size="30">9</text>
-                    <text x="105" y="114" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-family="DM Serif Display,serif" font-size="30">1</text>
-                    <text x="172" y="114" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-family="DM Serif Display,serif" font-size="30">6</text>
-                    <text x="38"  y="181" text-anchor="middle" fill="rgba(192,113,58,0.95)" font-family="DM Serif Display,serif" font-size="30">3</text>
-                    <text x="105" y="181" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-family="DM Serif Display,serif" font-size="30">8</text>
-                    <text x="172" y="181" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-family="DM Serif Display,serif" font-size="30">5</text>
-                </svg>
-            </div>
-            <div class="feat__info">
-                <div class="badge badge--live" data-t="badge.live">Live now</div>
-                <h3 class="feat__title">Sudoku Puzzle</h3>
-                <p class="feat__desc" data-t="feat.desc">
-                    The classic logic puzzle, done right. Four difficulty levels, a clean interface, and a timer that only matters when you want it to. No tricks — just the grid and you.
-                </p>
-                <a id="feat-play-link" href="https://play.google.com/store/apps/details?id=com.aramis.sudoku"
-                   target="_blank" rel="noopener" class="btn-play">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                        <path d="M5 3.5v17c0 .83 1.01 1.3 1.6.8l13-8.5a1 1 0 000-1.6L6.6 2.7C6.01 2.2 5 2.67 5 3.5z"/>
-                    </svg>
-                    <span data-t="feat.play">Get it on Google Play</span>
-                </a>
-            </div>
-        </article>
-
-        <!-- Grid rendered by JS from the GAMES config in the script below -->
-        <div class="games__lists" id="games-grid"></div>
+        <!-- Published games: one full card each (visual + info), rendered by JS
+             from the GAMES config. Upcoming ones follow as compact tiles. -->
+        <div id="games-featured"></div>
+        <div class="grid grid--soon" id="games-grid"></div>
     </div>
 </section>
 
@@ -757,46 +710,151 @@ const ICONS = {
   /* ── AÑADE AQUÍ EL ICONO DE CADA JUEGO NUEVO ── */
 };
 
+/* ════════════════════════════════════════════════════════════════════════════
+   ██  VISUALES  ██
+   Ilustración 210×210 del panel oscuro de cada juego PUBLICADO (tarjeta grande).
+   La clave debe coincidir con el campo `id` de GAMES. Si un juego publicado no
+   tiene visual, la tarjeta cae a su icono de catálogo ampliado.
+   ════════════════════════════════════════════════════════════════════════════ */
+const VISUALS = {
+  'sudoku': `
+      <svg width="210" height="210" viewBox="0 0 210 210" fill="none"
+      style="position:relative;z-index:1;" aria-hidden="true">
+      <rect x="8"   y="8"   width="60" height="60" rx="7" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.13)" stroke-width="1"/>
+      <rect x="75"  y="8"   width="60" height="60" rx="7" fill="rgba(44,95,138,0.35)"  stroke="rgba(74,144,200,0.45)" stroke-width="1"/>
+      <rect x="142" y="8"   width="60" height="60" rx="7" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.13)" stroke-width="1"/>
+      <rect x="8"   y="75"  width="60" height="60" rx="7" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.13)" stroke-width="1"/>
+      <rect x="75"  y="75"  width="60" height="60" rx="7" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.13)" stroke-width="1"/>
+      <rect x="142" y="75"  width="60" height="60" rx="7" fill="rgba(44,95,138,0.35)"  stroke="rgba(74,144,200,0.45)" stroke-width="1"/>
+      <rect x="8"   y="142" width="60" height="60" rx="7" fill="rgba(192,113,58,0.28)" stroke="rgba(192,113,58,0.55)" stroke-width="1"/>
+      <rect x="75"  y="142" width="60" height="60" rx="7" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.13)" stroke-width="1"/>
+      <rect x="142" y="142" width="60" height="60" rx="7" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.13)" stroke-width="1"/>
+      <text x="38"  y="47"  text-anchor="middle" fill="rgba(255,255,255,0.22)" font-family="DM Serif Display,serif" font-size="30">7</text>
+      <text x="105" y="47"  text-anchor="middle" fill="rgba(255,255,255,0.85)" font-family="DM Serif Display,serif" font-size="30">4</text>
+      <text x="172" y="47"  text-anchor="middle" fill="rgba(255,255,255,0.22)" font-family="DM Serif Display,serif" font-size="30">2</text>
+      <text x="38"  y="114" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-family="DM Serif Display,serif" font-size="30">9</text>
+      <text x="105" y="114" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-family="DM Serif Display,serif" font-size="30">1</text>
+      <text x="172" y="114" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-family="DM Serif Display,serif" font-size="30">6</text>
+      <text x="38"  y="181" text-anchor="middle" fill="rgba(192,113,58,0.95)" font-family="DM Serif Display,serif" font-size="30">3</text>
+      <text x="105" y="181" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-family="DM Serif Display,serif" font-size="30">8</text>
+      <text x="172" y="181" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-family="DM Serif Display,serif" font-size="30">5</text>
+      </svg>`,
+  'puzzle2048': `
+    2048
+<svg width="210" height="210" viewBox="0 0 210 210" fill="none" style="position:relative;z-index:1;" aria-hidden="true">
+      <rect x="3" y="3" width="45" height="45" rx="6" fill="rgba(194,94,18,0.22)" stroke="rgba(194,94,18,0.45)" stroke-width="1"/>
+      <rect x="56" y="3" width="45" height="45" rx="6" fill="rgba(194,94,18,0.22)" stroke="rgba(194,94,18,0.45)" stroke-width="1"/>
+      <rect x="109" y="3" width="45" height="45" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.13)" stroke-width="1"/>
+      <rect x="162" y="3" width="45" height="45" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.13)" stroke-width="1"/>
+      <rect x="3" y="56" width="45" height="45" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.13)" stroke-width="1"/>
+      <rect x="56" y="56" width="45" height="45" rx="6" fill="rgba(194,94,18,0.22)" stroke="rgba(194,94,18,0.45)" stroke-width="1"/>
+      <rect x="109" y="56" width="45" height="45" rx="6" fill="rgba(194,94,18,0.22)" stroke="rgba(194,94,18,0.45)" stroke-width="1"/>
+      <rect x="162" y="56" width="45" height="45" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.13)" stroke-width="1"/>
+      <rect x="3" y="109" width="45" height="45" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.13)" stroke-width="1"/>
+      <rect x="56" y="109" width="45" height="45" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.13)" stroke-width="1"/>
+      <rect x="109" y="109" width="45" height="45" rx="6" fill="rgba(194,94,18,0.22)" stroke="rgba(194,94,18,0.45)" stroke-width="1"/>
+      <rect x="162" y="109" width="45" height="45" rx="6" fill="rgba(194,94,18,0.22)" stroke="rgba(194,94,18,0.45)" stroke-width="1"/>
+      <rect x="3" y="162" width="45" height="45" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.13)" stroke-width="1"/>
+      <rect x="56" y="162" width="45" height="45" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.13)" stroke-width="1"/>
+      <rect x="109" y="162" width="45" height="45" rx="6" fill="rgba(194,94,18,0.22)" stroke="rgba(194,94,18,0.45)" stroke-width="1"/>
+      <rect x="162" y="162" width="45" height="45" rx="6" fill="rgba(194,94,18,0.6)" stroke="rgba(232,142,72,0.85)" stroke-width="1"/>
+      <text x="25.5" y="32.15" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-family="DM Serif Display,serif" font-size="19">2</text>
+      <text x="78.5" y="32.15" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-family="DM Serif Display,serif" font-size="19">4</text>
+      <text x="78.5" y="85.15" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-family="DM Serif Display,serif" font-size="19">8</text>
+      <text x="131.5" y="85.15" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-family="DM Serif Display,serif" font-size="19">16</text>
+      <text x="131.5" y="138.15" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-family="DM Serif Display,serif" font-size="19">32</text>
+      <text x="184.5" y="138.15" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-family="DM Serif Display,serif" font-size="19">64</text>
+      <text x="131.5" y="189.4" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-family="DM Serif Display,serif" font-size="14">128</text>
+      <text x="184.5" y="188.7" text-anchor="middle" fill="rgba(255,255,255,0.98)" font-family="DM Serif Display,serif" font-size="12">2048</text>
+    </svg>`,
+  'wordle': `
+    WORDLE
+<svg width="210" height="210" viewBox="0 0 210 210" fill="none" style="position:relative;z-index:1;" aria-hidden="true">
+      <rect x="1" y="22" width="36" height="36" rx="6" fill="rgba(192,113,58,0.5)" stroke="rgba(192,113,58,0.8)" stroke-width="1"/>
+      <rect x="44" y="22" width="36" height="36" rx="6" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <rect x="87" y="22" width="36" height="36" rx="6" fill="rgba(192,113,58,0.5)" stroke="rgba(192,113,58,0.8)" stroke-width="1"/>
+      <rect x="130" y="22" width="36" height="36" rx="6" fill="rgba(192,113,58,0.5)" stroke="rgba(192,113,58,0.8)" stroke-width="1"/>
+      <rect x="173" y="22" width="36" height="36" rx="6" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <rect x="1" y="65" width="36" height="36" rx="6" fill="rgba(83,141,78,0.6)" stroke="rgba(83,141,78,0.85)" stroke-width="1"/>
+      <rect x="44" y="65" width="36" height="36" rx="6" fill="rgba(83,141,78,0.6)" stroke="rgba(83,141,78,0.85)" stroke-width="1"/>
+      <rect x="87" y="65" width="36" height="36" rx="6" fill="rgba(83,141,78,0.6)" stroke="rgba(83,141,78,0.85)" stroke-width="1"/>
+      <rect x="130" y="65" width="36" height="36" rx="6" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <rect x="173" y="65" width="36" height="36" rx="6" fill="rgba(83,141,78,0.6)" stroke="rgba(83,141,78,0.85)" stroke-width="1"/>
+      <rect x="1" y="108" width="36" height="36" rx="6" fill="rgba(83,141,78,0.6)" stroke="rgba(83,141,78,0.85)" stroke-width="1"/>
+      <rect x="44" y="108" width="36" height="36" rx="6" fill="rgba(83,141,78,0.6)" stroke="rgba(83,141,78,0.85)" stroke-width="1"/>
+      <rect x="87" y="108" width="36" height="36" rx="6" fill="rgba(83,141,78,0.6)" stroke="rgba(83,141,78,0.85)" stroke-width="1"/>
+      <rect x="130" y="108" width="36" height="36" rx="6" fill="rgba(83,141,78,0.6)" stroke="rgba(83,141,78,0.85)" stroke-width="1"/>
+      <rect x="173" y="108" width="36" height="36" rx="6" fill="rgba(83,141,78,0.6)" stroke="rgba(83,141,78,0.85)" stroke-width="1"/>
+      <rect x="1" y="151" width="36" height="36" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+      <rect x="44" y="151" width="36" height="36" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+      <rect x="87" y="151" width="36" height="36" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+      <rect x="130" y="151" width="36" height="36" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+      <rect x="173" y="151" width="36" height="36" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+      <text x="19" y="46.5" text-anchor="middle" fill="rgba(255,255,255,0.95)" font-family="DM Serif Display,serif" font-size="18">S</text>
+      <text x="62" y="46.5" text-anchor="middle" fill="rgba(255,255,255,0.45)" font-family="DM Serif Display,serif" font-size="18">H</text>
+      <text x="105" y="46.5" text-anchor="middle" fill="rgba(255,255,255,0.95)" font-family="DM Serif Display,serif" font-size="18">O</text>
+      <text x="148" y="46.5" text-anchor="middle" fill="rgba(255,255,255,0.95)" font-family="DM Serif Display,serif" font-size="18">R</text>
+      <text x="191" y="46.5" text-anchor="middle" fill="rgba(255,255,255,0.45)" font-family="DM Serif Display,serif" font-size="18">T</text>
+      <text x="19" y="89.5" text-anchor="middle" fill="rgba(255,255,255,0.95)" font-family="DM Serif Display,serif" font-size="18">W</text>
+      <text x="62" y="89.5" text-anchor="middle" fill="rgba(255,255,255,0.95)" font-family="DM Serif Display,serif" font-size="18">O</text>
+      <text x="105" y="89.5" text-anchor="middle" fill="rgba(255,255,255,0.95)" font-family="DM Serif Display,serif" font-size="18">R</text>
+      <text x="148" y="89.5" text-anchor="middle" fill="rgba(255,255,255,0.45)" font-family="DM Serif Display,serif" font-size="18">M</text>
+      <text x="191" y="89.5" text-anchor="middle" fill="rgba(255,255,255,0.95)" font-family="DM Serif Display,serif" font-size="18">S</text>
+      <text x="19" y="132.5" text-anchor="middle" fill="rgba(255,255,255,0.95)" font-family="DM Serif Display,serif" font-size="18">W</text>
+      <text x="62" y="132.5" text-anchor="middle" fill="rgba(255,255,255,0.95)" font-family="DM Serif Display,serif" font-size="18">O</text>
+      <text x="105" y="132.5" text-anchor="middle" fill="rgba(255,255,255,0.95)" font-family="DM Serif Display,serif" font-size="18">R</text>
+      <text x="148" y="132.5" text-anchor="middle" fill="rgba(255,255,255,0.95)" font-family="DM Serif Display,serif" font-size="18">D</text>
+      <text x="191" y="132.5" text-anchor="middle" fill="rgba(255,255,255,0.95)" font-family="DM Serif Display,serif" font-size="18">S</text>
+    </svg>`,
+  /* ── AÑADE AQUÍ EL VISUAL DE CADA JUEGO AL PUBLICARLO ── */
+};
+
 /* ── helpers ── */
 function hexRgb(hex) {
     return [parseInt(hex.slice(1,3),16), parseInt(hex.slice(3,5),16), parseInt(hex.slice(5,7),16)];
 }
 
-/* ── Render the non-featured games from GAMES config ──
-   Published games get a big card (icon, description, Play Store button);
-   the ones still coming get a compact tile. ── */
-function gameCard(g, lang) {
+/* ── PLAY STORE button glyph, shared by both card types ── */
+const PLAY_GLYPH = '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 3.5v17c0 .83 1.01 1.3 1.6.8l13-8.5a1 1 0 000-1.6L6.6 2.7C6.01 2.2 5 2.67 5 3.5z"/></svg>';
+
+/* ── A published game: the full card — dark visual panel + info panel.
+      Same design for every live game; Sudoku just happens to be first. ── */
+function featuredCard(g, lang) {
+    const visual = VISUALS[g.id] || `<div class="feat__mark">${ICONS[g.id] || ''}</div>`;
+    const descK  = 'game.' + g.id + '.long';
+    const desc   = (T[descK] && (T[descK][lang] || T[descK].en)) || '';
+    const badge  = (T['badge.live'] && T['badge.live'][lang]) || 'Live now';
+    const play   = (T['feat.play'] && T['feat.play'][lang]) || 'Get it on Google Play';
+    return `<article class="feat">
+            <div class="feat__visual">${visual}</div>
+            <div class="feat__info">
+                <div class="badge badge--live">${badge}</div>
+                <h3 class="feat__title">${g.name}</h3>
+                <p class="feat__desc">${desc}</p>
+                <a href="${g.url}" target="_blank" rel="noopener" class="btn-play">${PLAY_GLYPH}<span>${play}</span></a>
+            </div>
+        </article>`;
+}
+
+/* ── An upcoming game: a compact tile, no description, no store link ── */
+function upcomingCard(g, lang) {
     const [r,g2,b] = hexRgb(g.accent);
-    const live     = g.status === 'live';
-    const icon     = ICONS[g.id] || '';
-    const genre    = (T[g.genre] && T[g.genre][lang]) || '';
-    const descKey  = 'game.' + g.id + '.desc';
-    const descTxt  = (T[descKey] && (T[descKey][lang] || T[descKey].en)) || '';
-    const desc     = (live && descTxt) ? `<p class="card__desc">${descTxt}</p>` : '';
-    const badgeTxt = live ? (T['badge.live'][lang]||'Live now') : (T['badge.soon'][lang]||'Coming soon');
-    const badgeCls = live ? 'badge--live' : 'badge--soon';
-    const playBtn  = (live && g.url)
-        ? `<a href="${g.url}" target="_blank" rel="noopener" class="btn-play-sm"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 3.5v17c0 .83 1.01 1.3 1.6.8l13-8.5a1 1 0 000-1.6L6.6 2.7C6.01 2.2 5 2.67 5 3.5z"/></svg> Play Store</a>`
-        : '';
-    return `<article class="card ${live ? 'card--live card--big' : 'card--sm'}"><div class="card__icon" style="background:rgba(${r},${g2},${b},0.11);">${icon}</div><div><div class="card__name">${g.name}</div><div class="card__genre">${genre}</div></div>${desc}<div class="badge ${badgeCls}">${badgeTxt}</div>${playBtn}</article>`;
+    const icon  = ICONS[g.id] || '';
+    const genre = (T[g.genre] && T[g.genre][lang]) || '';
+    const badge = (T['badge.soon'] && T['badge.soon'][lang]) || 'Coming soon';
+    return `<article class="card card--sm"><div class="card__icon" style="background:rgba(${r},${g2},${b},0.11);">${icon}</div><div><div class="card__name">${g.name}</div><div class="card__genre">${genre}</div></div><div class="badge badge--soon">${badge}</div></article>`;
 }
 
-function renderGrid(lang) {
-    const wrap = document.getElementById('games-grid');
-    if (!wrap) return;
-    const rest = GAMES.filter(g => !g.featured);
-    const live = rest.filter(g => g.status === 'live');
-    const soon = rest.filter(g => g.status !== 'live');
-    const block = (games, cls) => games.length
-        ? `<div class="grid ${cls}">${games.map(g => gameCard(g, lang)).join('')}</div>`
-        : '';
-    wrap.innerHTML = block(live, 'grid--live') + block(soon, 'grid--soon');
-}
-
-/* ── Sync featured card Play Store URL from GAMES config ── */
-function applyFeaturedUrl() {
-    const feat = GAMES.find(g => g.featured && g.url);
-    if (feat) { const el = document.getElementById('feat-play-link'); if (el) el.href = feat.url; }
+/* ── Both lists come straight from the GAMES config: `status` decides which
+      shape a game gets, `featured` only decides who goes first. ── */
+function renderGames(lang) {
+    const feat = document.getElementById('games-featured');
+    const grid = document.getElementById('games-grid');
+    const live = GAMES.filter(g => g.status === 'live' && g.url)
+                      .sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+    const soon = GAMES.filter(g => g.status !== 'live');
+    if (feat) feat.innerHTML = live.map(g => featuredCard(g, lang)).join('');
+    if (grid) grid.innerHTML = soon.map(g => upcomingCard(g, lang)).join('');
 }
 
 /* ── Translations ── */
@@ -856,32 +914,11 @@ const T = {
     de: 'Drei veröffentlicht, mehr kommen. Jedes ein vollständiges Erlebnis — nicht mehr, nicht weniger.',
     it: 'Tre pubblicati, altri in arrivo. Ognuno un\'esperienza completa — niente di più, niente di meno.'
   },
-  /* Per-game card descriptions — keyed `game.<GAMES id>.desc`.
-     Text mirrors each game's real Play Store short description, so the card
-     and the listing say the same thing. Add one when a game publishes. */
-  'game.puzzle2048.desc': {
-    en: 'Swipe and merge tiles to reach 2048. Six modes: zen, time attack and more.',
-    es: 'Desliza y une fichas hasta 2048. Seis modos: zen, contrarreloj y más.',
-    pt: 'Deslize e junte peças até 2048. Seis modos: zen, contra o tempo e mais.',
-    hi: 'स्वाइप करें, टाइलें जोड़ें, 2048 तक पहुंचें। छह गेम मोड।',
-    ja: 'スワイプでタイルを合体させて2048へ。禅やタイムアタックなど6つのモード。',
-    de: 'Wische und verbinde Kacheln bis 2048. Sechs Modi: Zen, Zeitrennen und mehr.',
-    it: 'Scorri e unisci le tessere fino a 2048. Sei modalità di gioco.'
-  },
-  'game.wordle.desc': {
-    en: 'Guess the hidden 5-letter word in 6 tries. A new daily word plus free practice.',
-    es: 'Adivina la palabra oculta de 5 letras en 6 intentos. Reto diario y práctica libre.',
-    pt: 'Adivinhe a palavra oculta de 5 letras em 6 tentativas. Desafio diário e prática.',
-    hi: '6 मौकों में 5 अक्षरों का छिपा शब्द पहचानें। रोज़ नया शब्द और अभ्यास।',
-    ja: '5文字の隠れた単語を6回で当てよう。毎日の新しい問題とフリー練習。',
-    de: 'Errate das versteckte 5-Buchstaben-Wort in 6 Versuchen. Täglich neu, plus freies Üben.',
-    it: 'Indovina la parola nascosta di 5 lettere in 6 tentativi. Sfida giornaliera e pratica.'
-  },
-
-  'badge.live': { en:'Live now',    es:'Disponible', pt:'Disponível', hi:'उपलब्ध',    ja:'配信中',   de:'Verfügbar',  it:'Disponibile'   },
-  'badge.soon': { en:'Coming soon', es:'Próximamente',pt:'Em breve',   hi:'जल्द आएगा',ja:'近日公開', de:'Demnächst',  it:'Prossimamente' },
-
-  'feat.desc': {
+  /* Copy of each published game's card — keyed `game.<GAMES id>.long`.
+     Sudoku keeps its original text; the rest take the opening paragraph of
+     their real Play Store description, so web and listing agree. Add a block
+     when a game publishes (7 locales), or the card renders with no text. */
+  'game.sudoku.long': {
     en: 'The classic logic puzzle, done right. Four difficulty levels, a clean interface, and a timer that only matters when you want it to. No tricks — just the grid and you.',
     es: 'El puzzle lógico clásico, bien hecho. Cuatro niveles de dificultad, una interfaz limpia y un cronómetro que solo importa cuando tú quieres. Sin trucos — solo la cuadrícula y tú.',
     pt: 'O puzzle lógico clássico, bem feito. Quatro níveis de dificuldade, uma interface limpa e um cronômetro que só importa quando você quer. Sem truques — só a grade e você.',
@@ -890,6 +927,28 @@ const T = {
     de: 'Das klassische Logikrätsel, richtig gemacht. Vier Schwierigkeitsgrade, eine aufgeräumte Oberfläche und ein Timer, der nur zählt, wenn du es willst. Keine Tricks — nur das Gitter und du.',
     it: 'Il classico puzzle logico, fatto come si deve. Quattro livelli di difficoltà, un\'interfaccia pulita e un timer che conta solo quando vuoi. Niente trucchi — solo la griglia e te.'
   },
+  'game.puzzle2048.long': {
+    en: '2048 Merge is the classic number puzzle, rebuilt to be clean, fast and relaxing. Swipe to slide the tiles, join equal numbers and double them: 2 + 2 = 4, 4 + 4 = 8… keep merging until you reach the 2048 tile — and beyond.',
+    es: '2048 Merge es el clásico puzzle de números, reconstruido para ser limpio, rápido y relajante. Desliza para mover las fichas, junta los números iguales y duplícalos: 2 + 2 = 4, 4 + 4 = 8… sigue uniendo hasta llegar a la ficha 2048, y más allá.',
+    pt: '2048 Merge é o clássico quebra-cabeça de números, reconstruído para ser limpo, rápido e relaxante. Deslize para mover as peças, junte os números iguais e dobre o valor: 2 + 2 = 4, 4 + 4 = 8… continue juntando até chegar à peça 2048 — e além.',
+    hi: '2048 Merge क्लासिक नंबर पहेली है — साफ़, तेज़ और सुकून भरे अंदाज़ में। स्वाइप करके टाइलें खिसकाएं, बराबर नंबर जोड़ें और उन्हें दोगुना करें: 2 + 2 = 4, 4 + 4 = 8… जोड़ते रहें और 2048 टाइल तक पहुंचें — और उससे भी आगे।',
+    ja: '2048 Mergeは、クリーンで快適、心地よく遊べるよう作り直した定番の数字パズルです。スワイプでタイルをスライドし、同じ数字を合体させて2倍に：2 + 2 = 4、4 + 4 = 8…合体を重ねて2048タイルを、さらにその先を目指しましょう。',
+    de: '2048 Merge ist das klassische Zahlenpuzzle — neu gebaut: klar, schnell und entspannend. Wische, um die Kacheln zu verschieben, verbinde gleiche Zahlen und verdopple sie: 2 + 2 = 4, 4 + 4 = 8 … merge weiter, bis du die 2048-Kachel erreichst — und darüber hinaus.',
+    it: '2048 Merge è il classico puzzle di numeri, ricostruito per essere pulito, veloce e rilassante. Scorri per muovere le tessere, unisci i numeri uguali e raddoppiali: 2 + 2 = 4, 4 + 4 = 8… continua a unire fino a raggiungere la tessera 2048 — e oltre.'
+  },
+  'game.wordle.long': {
+    en: 'Word Guess is a clean, addictive word puzzle: find the hidden five-letter word in six tries. Type a word and the tiles tell you how close you are — green means the letter is in the right spot, amber means it's in the word but in a different place, and grey means it isn't in the word at all.',
+    es: 'Word Guess es un puzzle de palabras elegante y adictivo: descubre la palabra oculta de cinco letras en seis intentos. Escribe una palabra y las casillas te dicen lo cerca que estás: verde significa que la letra está en su sitio, ámbar que está en la palabra pero en otra posición, y gris que no está.',
+    pt: 'Word Guess é um quebra-cabeça de palavras elegante e viciante: descubra a palavra oculta de cinco letras em seis tentativas. Digite uma palavra e os quadros mostram o quão perto você está: verde significa que a letra está no lugar certo, âmbar que está na palavra mas em outra posição, e cinza que não está.',
+    hi: 'Word Guess एक साफ़-सुथरा और मज़ेदार शब्द पहेली है: छह मौकों में पाँच अक्षरों का छिपा शब्द खोजें। कोई शब्द टाइप करें और टाइलें बताती हैं कि आप कितने पास हैं — हरा मतलब अक्षर सही जगह पर है, अंबर मतलब शब्द में है पर किसी और जगह, और ग्रे मतलब शब्द में नहीं है।',
+    ja: 'Word Guess は、すっきり遊べる単語パズルです。隠れた5文字の単語を6回以内に当てましょう。 単語を入力すると、タイルがヒントを教えてくれます。',
+    de: 'Word Guess ist ein klares, fesselndes Wortspiel: Finde das versteckte Wort aus fünf Buchstaben in sechs Versuchen. Gib ein Wort ein und die Kacheln zeigen, wie nah du bist: Grün heißt, der Buchstabe steht richtig, Bernstein heißt, er kommt im Wort vor, aber an anderer Stelle, und Grau heißt, er kommt gar nicht vor.',
+    it: 'Word Guess è un puzzle di parole pulito e avvincente: trova la parola nascosta di cinque lettere in sei tentativi. Scrivi una parola e le caselle ti dicono quanto sei vicino: verde significa che la lettera è al posto giusto, ambra che è nella parola ma in un'altra posizione, e grigio che non c'è.'
+  },
+
+  'badge.live': { en:'Live now',    es:'Disponible', pt:'Disponível', hi:'उपलब्ध',    ja:'配信中',   de:'Verfügbar',  it:'Disponibile'   },
+  'badge.soon': { en:'Coming soon', es:'Próximamente',pt:'Em breve',   hi:'जल्द आएगा',ja:'近日公開', de:'Demnächst',  it:'Prossimamente' },
+
   'feat.play': {
     en:'Get it on Google Play',
     es:'Consíguelo en Google Play',
@@ -989,7 +1048,7 @@ function setLang(lang) {
         if (v && v[lang] != null) el.innerHTML = v[lang];
     });
 
-    renderGrid(lang);
+    renderGames(lang);
     document.getElementById('langCode').textContent = lang.toUpperCase();
     document.querySelectorAll('#langDrop li button').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.l === lang);
@@ -1018,9 +1077,8 @@ const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 50);
 window.addEventListener('scroll', onScroll, { passive: true });
 onScroll();
 
-/* ── Init language + featured URL ── */
+/* ── Init language ── */
 (function() {
-    applyFeaturedUrl();
     const saved = localStorage.getItem('ag-lang');
     const valid = Object.keys(T['nav.games']);
     if (saved && valid.includes(saved)) { setLang(saved); return; }
