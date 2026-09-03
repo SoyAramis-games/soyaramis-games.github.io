@@ -332,6 +332,7 @@
         .card__icon  { width: 46px; height: 46px; border-radius: 11px; display: flex; align-items: center; justify-content: center; }
         .card__name  { font-family: var(--font-d); font-size: 1.1rem; color: var(--text); line-height: 1.2; }
         .card__genre { font-size: 0.78rem; color: var(--muted); margin-top: -0.4rem; }
+        .card__desc  { font-size: 0.85rem; color: var(--muted); line-height: 1.65; margin-top: -0.15rem; }
 
 
         /* ════════════════════════════
@@ -747,12 +748,15 @@ function renderGrid(lang) {
         const [r,g2,b] = hexRgb(g.accent);
         const icon     = ICONS[g.id] || '';
         const genre    = (T[g.genre] && T[g.genre][lang]) || '';
+        const descKey  = 'game.' + g.id + '.desc';
+        const descTxt  = (T[descKey] && (T[descKey][lang] || T[descKey].en)) || '';
+        const desc     = descTxt ? `<p class="card__desc">${descTxt}</p>` : '';
         const badgeTxt = g.status === 'live' ? (T['badge.live'][lang]||'Live now') : (T['badge.soon'][lang]||'Coming soon');
         const badgeCls = g.status === 'live' ? 'badge--live' : 'badge--soon';
         const playBtn  = (g.status === 'live' && g.url)
             ? `<a href="${g.url}" target="_blank" rel="noopener" class="btn-play-sm"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 3.5v17c0 .83 1.01 1.3 1.6.8l13-8.5a1 1 0 000-1.6L6.6 2.7C6.01 2.2 5 2.67 5 3.5z"/></svg> Play Store</a>`
             : '';
-        return `<article class="card${g.status==='live'?' card--live':''}"><div class="card__icon" style="background:rgba(${r},${g2},${b},0.11);">${icon}</div><div><div class="card__name">${g.name}</div><div class="card__genre">${genre}</div></div><div class="badge ${badgeCls}">${badgeTxt}</div>${playBtn}</article>`;
+        return `<article class="card${g.status==='live'?' card--live':''}"><div class="card__icon" style="background:rgba(${r},${g2},${b},0.11);">${icon}</div><div><div class="card__name">${g.name}</div><div class="card__genre">${genre}</div></div>${desc}<div class="badge ${badgeCls}">${badgeTxt}</div>${playBtn}</article>`;
     }).join('');
 }
 
@@ -819,6 +823,28 @@ const T = {
     de: 'Drei veröffentlicht, mehr kommen. Jedes ein vollständiges Erlebnis — nicht mehr, nicht weniger.',
     it: 'Tre pubblicati, altri in arrivo. Ognuno un\'esperienza completa — niente di più, niente di meno.'
   },
+  /* Per-game card descriptions — keyed `game.<GAMES id>.desc`.
+     Text mirrors each game's real Play Store short description, so the card
+     and the listing say the same thing. Add one when a game publishes. */
+  'game.puzzle2048.desc': {
+    en: 'Swipe and merge tiles to reach 2048. Six modes: zen, time attack and more.',
+    es: 'Desliza y une fichas hasta 2048. Seis modos: zen, contrarreloj y más.',
+    pt: 'Deslize e junte peças até 2048. Seis modos: zen, contra o tempo e mais.',
+    hi: 'स्वाइप करें, टाइलें जोड़ें, 2048 तक पहुंचें। छह गेम मोड।',
+    ja: 'スワイプでタイルを合体させて2048へ。禅やタイムアタックなど6つのモード。',
+    de: 'Wische und verbinde Kacheln bis 2048. Sechs Modi: Zen, Zeitrennen und mehr.',
+    it: 'Scorri e unisci le tessere fino a 2048. Sei modalità di gioco.'
+  },
+  'game.wordle.desc': {
+    en: 'Guess the hidden 5-letter word in 6 tries. A new daily word plus free practice.',
+    es: 'Adivina la palabra oculta de 5 letras en 6 intentos. Reto diario y práctica libre.',
+    pt: 'Adivinhe a palavra oculta de 5 letras em 6 tentativas. Desafio diário e prática.',
+    hi: '6 मौकों में 5 अक्षरों का छिपा शब्द पहचानें। रोज़ नया शब्द और अभ्यास।',
+    ja: '5文字の隠れた単語を6回で当てよう。毎日の新しい問題とフリー練習。',
+    de: 'Errate das versteckte 5-Buchstaben-Wort in 6 Versuchen. Täglich neu, plus freies Üben.',
+    it: 'Indovina la parola nascosta di 5 lettere in 6 tentativi. Sfida giornaliera e pratica.'
+  },
+
   'badge.live': { en:'Live now',    es:'Disponible', pt:'Disponível', hi:'उपलब्ध',    ja:'配信中',   de:'Verfügbar',  it:'Disponibile'   },
   'badge.soon': { en:'Coming soon', es:'Próximamente',pt:'Em breve',   hi:'जल्द आएगा',ja:'近日公開', de:'Demnächst',  it:'Prossimamente' },
 
