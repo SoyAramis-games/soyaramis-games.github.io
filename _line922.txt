@@ -1,0 +1,1 @@
+    en: ’The classic logic puzzle, done right. Four difficulty levels, a clean interface, and a timer that only matters when you want it to. No tricks — just the grid and you.’,
