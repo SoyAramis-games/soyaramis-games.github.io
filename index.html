@@ -321,7 +321,11 @@
         }
         .btn-play:hover { background: var(--blue); transform: translateY(-1px); }
 
+        .games__lists { display: flex; flex-direction: column; gap: 1.4rem; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 1.1rem; }
+        /* Published games get room to breathe; unreleased ones stay compact. */
+        .grid--live { grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 1.3rem; }
+        .grid--soon { grid-template-columns: repeat(auto-fill, minmax(152px, 1fr)); gap: 0.9rem; }
         .card {
             background: var(--white); border: 1px solid var(--border);
             border-radius: var(--r); padding: 1.6rem 1.4rem 1.5rem;
@@ -333,6 +337,21 @@
         .card__name  { font-family: var(--font-d); font-size: 1.1rem; color: var(--text); line-height: 1.2; }
         .card__genre { font-size: 0.78rem; color: var(--muted); margin-top: -0.4rem; }
         .card__desc  { font-size: 0.85rem; color: var(--muted); line-height: 1.65; margin-top: -0.15rem; }
+
+        .card .badge { margin-bottom: 0; }
+        .card--big { padding: 2.1rem 2rem 1.9rem; gap: 1rem; }
+        .card--big .card__icon { width: 62px; height: 62px; border-radius: 15px; }
+        .card--big .card__icon svg { width: 34px; height: 34px; }
+        .card--big .card__name { font-size: 1.45rem; }
+        .card--big .card__genre { font-size: 0.82rem; margin-top: -0.2rem; }
+        .card--big .badge { margin-top: auto; }
+
+        .card--sm { padding: 1.2rem 1.1rem 1.15rem; gap: 0.65rem; }
+        .card--sm .card__icon { width: 36px; height: 36px; border-radius: 9px; }
+        .card--sm .card__icon svg { width: 20px; height: 20px; }
+        .card--sm .card__name { font-size: 0.95rem; }
+        .card--sm .card__genre { font-size: 0.72rem; margin-top: -0.3rem; }
+        .card--sm .badge { margin-top: auto; font-size: 0.68rem; padding: 0.28rem 0.6rem; }
 
 
         /* ════════════════════════════
@@ -404,7 +423,10 @@
             .games { padding: 4rem 1.4rem; }
             .about { padding: 5rem 1.4rem; }
         }
-        @media (max-width: 480px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 480px) {
+            .grid--soon { grid-template-columns: repeat(2, 1fr); }
+            .grid--live { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 
@@ -610,7 +632,7 @@
         </article>
 
         <!-- Grid rendered by JS from the GAMES config in the script below -->
-        <div class="grid" id="games-grid"></div>
+        <div class="games__lists" id="games-grid"></div>
     </div>
 </section>
 
@@ -740,24 +762,35 @@ function hexRgb(hex) {
     return [parseInt(hex.slice(1,3),16), parseInt(hex.slice(3,5),16), parseInt(hex.slice(5,7),16)];
 }
 
-/* ── Render the non-featured games grid from GAMES config ── */
+/* ── Render the non-featured games from GAMES config ──
+   Published games get a big card (icon, description, Play Store button);
+   the ones still coming get a compact tile. ── */
+function gameCard(g, lang) {
+    const [r,g2,b] = hexRgb(g.accent);
+    const live     = g.status === 'live';
+    const icon     = ICONS[g.id] || '';
+    const genre    = (T[g.genre] && T[g.genre][lang]) || '';
+    const descKey  = 'game.' + g.id + '.desc';
+    const descTxt  = (T[descKey] && (T[descKey][lang] || T[descKey].en)) || '';
+    const desc     = (live && descTxt) ? `<p class="card__desc">${descTxt}</p>` : '';
+    const badgeTxt = live ? (T['badge.live'][lang]||'Live now') : (T['badge.soon'][lang]||'Coming soon');
+    const badgeCls = live ? 'badge--live' : 'badge--soon';
+    const playBtn  = (live && g.url)
+        ? `<a href="${g.url}" target="_blank" rel="noopener" class="btn-play-sm"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 3.5v17c0 .83 1.01 1.3 1.6.8l13-8.5a1 1 0 000-1.6L6.6 2.7C6.01 2.2 5 2.67 5 3.5z"/></svg> Play Store</a>`
+        : '';
+    return `<article class="card ${live ? 'card--live card--big' : 'card--sm'}"><div class="card__icon" style="background:rgba(${r},${g2},${b},0.11);">${icon}</div><div><div class="card__name">${g.name}</div><div class="card__genre">${genre}</div></div>${desc}<div class="badge ${badgeCls}">${badgeTxt}</div>${playBtn}</article>`;
+}
+
 function renderGrid(lang) {
-    const grid = document.getElementById('games-grid');
-    if (!grid) return;
-    grid.innerHTML = GAMES.filter(g => !g.featured).map(g => {
-        const [r,g2,b] = hexRgb(g.accent);
-        const icon     = ICONS[g.id] || '';
-        const genre    = (T[g.genre] && T[g.genre][lang]) || '';
-        const descKey  = 'game.' + g.id + '.desc';
-        const descTxt  = (T[descKey] && (T[descKey][lang] || T[descKey].en)) || '';
-        const desc     = descTxt ? `<p class="card__desc">${descTxt}</p>` : '';
-        const badgeTxt = g.status === 'live' ? (T['badge.live'][lang]||'Live now') : (T['badge.soon'][lang]||'Coming soon');
-        const badgeCls = g.status === 'live' ? 'badge--live' : 'badge--soon';
-        const playBtn  = (g.status === 'live' && g.url)
-            ? `<a href="${g.url}" target="_blank" rel="noopener" class="btn-play-sm"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 3.5v17c0 .83 1.01 1.3 1.6.8l13-8.5a1 1 0 000-1.6L6.6 2.7C6.01 2.2 5 2.67 5 3.5z"/></svg> Play Store</a>`
-            : '';
-        return `<article class="card${g.status==='live'?' card--live':''}"><div class="card__icon" style="background:rgba(${r},${g2},${b},0.11);">${icon}</div><div><div class="card__name">${g.name}</div><div class="card__genre">${genre}</div></div>${desc}<div class="badge ${badgeCls}">${badgeTxt}</div>${playBtn}</article>`;
-    }).join('');
+    const wrap = document.getElementById('games-grid');
+    if (!wrap) return;
+    const rest = GAMES.filter(g => !g.featured);
+    const live = rest.filter(g => g.status === 'live');
+    const soon = rest.filter(g => g.status !== 'live');
+    const block = (games, cls) => games.length
+        ? `<div class="grid ${cls}">${games.map(g => gameCard(g, lang)).join('')}</div>`
+        : '';
+    wrap.innerHTML = block(live, 'grid--live') + block(soon, 'grid--soon');
 }
 
 /* ── Sync featured card Play Store URL from GAMES config ── */
